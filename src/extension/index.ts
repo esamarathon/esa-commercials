@@ -1,5 +1,9 @@
+/* eslint-disable global-require */
+
 import { NodeCG } from 'nodecg/types/server';
+import { set } from './util/nodecg';
 
 export = (nodecg: NodeCG): void => {
-  nodecg.log.info('Extension code working!');
+  set(nodecg);
+  require('./commercial');
 };

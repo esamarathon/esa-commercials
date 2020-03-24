@@ -1,0 +1,38 @@
+import { Configschema } from 'configschema';
+import OBSWebSocketJS from 'obs-websocket-js';
+import { get as nodecg } from './nodecg';
+
+const config = (nodecg().bundleConfig as Configschema).obs;
+
+const obs = new OBSWebSocketJS();
+const settings = {
+  address: config.address,
+  password: config.password,
+};
+
+async function connect(): Promise<void> {
+  try {
+    await obs.connect(settings);
+    nodecg().log.info('[OBS] Connection successful');
+  } catch (err) {
+    nodecg().log.warn('[OBS] Connection error');
+    nodecg().log.debug('[OBS] Connection error:', err);
+  }
+}
+
+if (config.enable) {
+  nodecg().log.info('[OBS] Setting up connection');
+  connect();
+  obs.on('ConnectionClosed', () => {
+    nodecg().log.warn('[OBS] Connection lost, retrying in 5 seconds');
+    setTimeout(connect, 5000);
+  });
+
+  // @ts-ignore: Pretty sure this emits an error.
+  obs.on('error', (err) => {
+    nodecg().log.warn('[OBS] Connection error');
+    nodecg().log.debug('[OBS] Connection error:', err);
+  });
+}
+
+export default obs;

@@ -35,5 +35,9 @@
     "bundleDependencies": {
       "nodecg-speedcontrol": "^2.0.0"
     }
+  },
+  "dependencies": {
+    "obs-websocket-js": "^4.0.1",
+    "speedcontrol-util": "github:speedcontrol/speedcontrol-util#dev-built"
   }
 }
