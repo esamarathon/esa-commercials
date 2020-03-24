@@ -1,6 +1,7 @@
 {
   "name": "esa-commercials",
   "version": "1.0.0",
+  "description": "NodeCG bundle used alongside nodecg-speedcontrol to run Twitch commercials for events on the ESAMarathon channel.",
   "homepage": "https://github.com/esamarathon/esa-commercials#readme",
   "bugs": {
     "url": "https://github.com/esamarathon/esa-commercials/issues"
@@ -19,6 +20,10 @@
     "typeschemas": "node script/typeschemas.js",
     "watch": "tsc -b tsconfig.extension.json -w"
   },
+  "dependencies": {
+    "obs-websocket-js": "^4.0.1",
+    "speedcontrol-util": "github:speedcontrol/speedcontrol-util#dev-built"
+  },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.25.0",
     "@typescript-eslint/parser": "^2.25.0",
@@ -35,9 +40,5 @@
     "bundleDependencies": {
       "nodecg-speedcontrol": "^2.0.0"
     }
-  },
-  "dependencies": {
-    "obs-websocket-js": "^4.0.1",
-    "speedcontrol-util": "github:speedcontrol/speedcontrol-util#dev-built"
   }
 }
