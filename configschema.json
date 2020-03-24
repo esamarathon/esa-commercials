@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "thisEvent": {
+      "type": "number",
+      "description": "This toggles if on the 1st/2nd stream if applicable for your event.",
+      "minimum": 1,
+      "maximum": 2,
+      "default": 1
+    },
+    "obs": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enable": {
+          "type": "boolean",
+          "default": true
+        },
+        "address": {
+          "type": "string",
+          "default": "localhost:4444"
+        },
+        "password": {
+          "type": "string",
+          "default": ""
+        },
+        "intermissionScene": {
+          "type": "string",
+          "default": "Intermission",
+          "description": "Name of the scene in OBS you wish to run commercials on when switched to."
+        }
+      },
+      "required": [
+        "enable",
+        "address",
+        "password",
+        "intermissionScene"
+      ]
+    }
+  },
+  "required": [
+    "thisEvent",
+    "obs"
+  ]
+}
