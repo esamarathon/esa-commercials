@@ -105,4 +105,4 @@ dist
 
 # Built files
 .cache/
-/extension/
+#/extension/
