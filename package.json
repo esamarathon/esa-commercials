@@ -1,0 +1,39 @@
+{
+  "name": "esa-commercials",
+  "version": "1.0.0",
+  "homepage": "https://github.com/esamarathon/esa-commercials#readme",
+  "bugs": {
+    "url": "https://github.com/esamarathon/esa-commercials/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/esamarathon/esa-commercials.git"
+  },
+  "license": "MIT",
+  "author": "zoton2",
+  "scripts": {
+    "autofix": "eslint --fix --ext .ts src/extension",
+    "build": "tsc -b tsconfig.extension.json",
+    "clean": "trash node_modules/.cache && trash extension",
+    "start": "node ../..",
+    "typeschemas": "node script/typeschemas.js",
+    "watch": "tsc -b tsconfig.extension.json -w"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^2.25.0",
+    "@typescript-eslint/parser": "^2.25.0",
+    "cross-env": "^7.0.2",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-plugin-import": "^2.20.1",
+    "json-schema-to-typescript": "^8.2.0",
+    "trash-cli": "^3.0.0",
+    "typescript": "^3.8.3"
+  },
+  "nodecg": {
+    "compatibleRange": "^1.6.0",
+    "bundleDependencies": {
+      "nodecg-speedcontrol": "^2.0.0"
+    }
+  }
+}
