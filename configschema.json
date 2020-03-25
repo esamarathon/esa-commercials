@@ -22,9 +22,9 @@
           "type": "string",
           "default": ""
         },
-        "intermissionScene": {
+        "commercialScene": {
           "type": "string",
-          "default": "Intermission",
+          "default": "Intermission (commercials)",
           "description": "Name of the scene in OBS you wish to run commercials on when switched to."
         }
       },
@@ -32,7 +32,7 @@
         "enable",
         "address",
         "password",
-        "intermissionScene"
+        "commercialScene"
       ]
     }
   },

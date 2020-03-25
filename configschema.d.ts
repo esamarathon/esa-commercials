@@ -16,6 +16,6 @@ export interface Configschema {
     /**
      * Name of the scene in OBS you wish to run commercials on when switched to.
      */
-    intermissionScene: string;
+    commercialScene: string;
   };
 }
