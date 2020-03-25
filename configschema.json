@@ -29,7 +29,6 @@
         }
       },
       "required": [
-        "enable",
         "address",
         "password",
         "commercialScene"
