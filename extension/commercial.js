@@ -115,7 +115,7 @@ obs_1.default.on('SwitchScenes', function (data) { return __awaiter(void 0, void
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                if (!data['scene-name'].startsWith(config.obs.intermissionScene)) return [3 /*break*/, 4];
+                if (!data['scene-name'].startsWith(config.obs.commercialScene)) return [3 /*break*/, 4];
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 3, , 4]);
