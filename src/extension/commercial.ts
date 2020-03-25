@@ -62,7 +62,7 @@ sc.on('timerReset', () => {
 
 // Trigger a Twitch commercial when on the relevant scene.
 obs.on('SwitchScenes', async (data) => {
-  if (data['scene-name'].startsWith(config.obs.intermissionScene)) {
+  if (data['scene-name'].startsWith(config.obs.commercialScene)) {
     try {
       await sc.sendMessage('twitchStartCommercial', { duration: 180 });
       nodecg().log.info('[Commercial] Triggered on change to relevant scene');

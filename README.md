@@ -27,7 +27,7 @@ If not obvious, you must be logged into/authorised with Twitch in the `nodecg-sp
   "obs": {
     "address": "localhost:4444",
     "password": "",
-    "intermissionScene": "Intermission"
+    "commercialScene": "Intermission (commercials)"
   }
 }
 ```
@@ -36,9 +36,9 @@ If not obvious, you must be logged into/authorised with Twitch in the `nodecg-sp
 - `obs`: Settings related to the OBS WebSocket connection.
   - `address`: Address of OBS WebSocket instance, in the pattern `hostname:port`. Does not need changing if using defaults and running locally.
   - `password`: Password used for securing the OBS WebSocket instance, if you have set this.
-  - `intermissionScene`: Name of the scene where commercials will be played when switched to; this is case sensitive and matches the start of the string, so more characters can be added after in your scene name in OBS if needed.
+  - `commercialScene`: Name of the scene where commercials will be played when switched to; this is case sensitive and matches the start of the string, so more characters can be added after in your scene name in OBS if needed.
 
 
 ## Usage
 
-Commercials will automatically be triggered when needed, including when switched to the intermission scene in OBS, by default the scene must start with "Intermission" but this can be changed in the configuration file (see above).
+Commercials will automatically be triggered when needed, including when switched to the commercial scene in OBS, by default the scene must start with "Intermission (commercials)" but this can be changed in the configuration file (see above).
