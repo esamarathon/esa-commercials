@@ -29,16 +29,17 @@ async function playCommercial(): Promise<void> {
   const timeLeft = run && run.estimateS
     ? (run.estimateS + 60) - (sc.timer.value.milliseconds / 1000) : 0;
   if (run.estimateS && run.estimateS > (60 * (40 - 1)) && timeLeft > (60 * 20)) {
+    const cycleTime = getCycleTime();
     try {
       await sc.sendMessage('twitchStartCommercial', { duration: 60 });
-      const cycleTime = getCycleTime();
-      commercialTO = setTimeout(playCommercial, 1000 * cycleTime);
-      nodecg().log.info('[Commercial] Triggered, will check again'
-        + ` in ${Math.floor(cycleTime / 60)} minutes`);
+      nodecg().log.info('[Commercial] Triggered successfully');
     } catch (err) {
       nodecg().log.warn('[Commercial] Could not successfully be triggered');
       nodecg().log.debug('[Commercial] Could not successfully be triggered:', err);
     }
+    commercialTO = setTimeout(playCommercial, 1000 * cycleTime);
+    nodecg().log.info('[Commercial] Will check again'
+      + ` in ${Math.floor(cycleTime / 60)} minutes`);
   } else {
     nodecg().log.info('[Commercial] Does not need to be triggered,'
       + ' will not check again for this run');
