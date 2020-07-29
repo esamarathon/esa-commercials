@@ -71,23 +71,25 @@ function playCommercial() {
                     timeLeft = run && run.estimateS
                         ? (run.estimateS + 60) - (sc.timer.value.milliseconds / 1000) : 0;
                     if (!(run.estimateS && run.estimateS > (60 * (40 - 1)) && timeLeft > (60 * 20))) return [3 /*break*/, 5];
+                    cycleTime = getCycleTime();
                     _a.label = 1;
                 case 1:
                     _a.trys.push([1, 3, , 4]);
                     return [4 /*yield*/, sc.sendMessage('twitchStartCommercial', { duration: 60 })];
                 case 2:
                     _a.sent();
-                    cycleTime = getCycleTime();
-                    commercialTO = setTimeout(playCommercial, 1000 * cycleTime);
-                    nodecg_1.get().log.info('[Commercial] Triggered, will check again'
-                        + (" in " + Math.floor(cycleTime / 60) + " minutes"));
+                    nodecg_1.get().log.info('[Commercial] Triggered successfully');
                     return [3 /*break*/, 4];
                 case 3:
                     err_1 = _a.sent();
                     nodecg_1.get().log.warn('[Commercial] Could not successfully be triggered');
                     nodecg_1.get().log.debug('[Commercial] Could not successfully be triggered:', err_1);
                     return [3 /*break*/, 4];
-                case 4: return [3 /*break*/, 6];
+                case 4:
+                    commercialTO = setTimeout(playCommercial, 1000 * cycleTime);
+                    nodecg_1.get().log.info('[Commercial] Will check again'
+                        + (" in " + Math.floor(cycleTime / 60) + " minutes"));
+                    return [3 /*break*/, 6];
                 case 5:
                     nodecg_1.get().log.info('[Commercial] Does not need to be triggered,'
                         + ' will not check again for this run');
