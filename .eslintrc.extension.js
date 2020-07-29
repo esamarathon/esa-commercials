@@ -10,7 +10,6 @@ module.exports = {
   extends: [
     'airbnb-base',
     'eslint:recommended',
-    'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:import/typescript',
   ],
@@ -41,6 +40,6 @@ module.exports = {
     'import/no-unresolved': [2, { caseSensitive: false }],
     'max-len': ['error', { 'code': 100 }],
     'lines-between-class-members': 'off',
-    '@typescript-eslint/ban-ts-ignore': 'off',
+    '@typescript-eslint/ban-ts-comment': 'off',
   },
 };
