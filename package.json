@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "obs-websocket-js": "^4.0.2",
-    "speedcontrol-util": "github:speedcontrol/speedcontrol-util#dev-built"
+    "speedcontrol-util": "https://github.com/speedcontrol/speedcontrol-util.git#dev-built"
   },
   "devDependencies": {
     "@types/needle": "^2.5.1",
