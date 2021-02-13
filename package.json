@@ -91,9 +91,11 @@
     },
     "dashboardPanels": [
       {
-        "name": "example",
-        "title": "Example",
-        "file": "example.html"
+        "name": "control",
+        "title": "ESA Commercial Control",
+        "file": "control.html",
+        "workspace": "ESA",
+        "width": 3
       }
     ]
   }

@@ -2,6 +2,7 @@ import type { Configschema } from '@/types/schemas/configschema';
 import { get as nodecg } from '@/util/nodecg';
 import obs from '@/util/obs';
 import SpeedcontrolUtil from 'speedcontrol-util';
+import { disabled } from './util/replicants';
 
 const config = (nodecg().bundleConfig as Configschema);
 const sc = new SpeedcontrolUtil(nodecg());
@@ -22,6 +23,10 @@ function getCycleTime(): number {
  * and the estimate is higher than 39 minutes.
  */
 async function playCommercial(): Promise<void> {
+  // We shouldn't be running at all, but just in case and it's disabled, don't go further.
+  if (disabled.value) {
+    return;
+  }
   const run = sc.getCurrentRun();
   if (!run) {
     return;
@@ -43,11 +48,13 @@ async function playCommercial(): Promise<void> {
   } else {
     nodecg().log.info('[Commercial] Does not need to be triggered,'
       + ' will not check again for this run');
+    disabled.value = true;
   }
 }
 
 sc.on('timerStarted', () => {
   clearTimeout(commercialTO);
+  disabled.value = false;
   nodecg().log.info('[Commercial] Will check if we can trigger in'
     + ` ${Math.floor(getCycleTime() / 60)} minutes`);
   commercialTO = setTimeout(playCommercial, 1000 * getCycleTime());
@@ -55,10 +62,12 @@ sc.on('timerStarted', () => {
 
 sc.on('timerStopped', () => {
   clearTimeout(commercialTO);
+  disabled.value = true;
 });
 
 sc.on('timerReset', () => {
   clearTimeout(commercialTO);
+  disabled.value = true;
 });
 
 // Trigger a Twitch commercial when on the relevant scene.
@@ -76,7 +85,7 @@ obs.on('SwitchScenes', async (data) => {
 
 // If the timer has been recovered on start up,
 // need to make sure the commercial checking is going to run.
-if (sc.timer.value.state === 'running') {
+if (sc.timer.value.state === 'running' && !disabled.value) {
   const run = sc.getCurrentRun();
   if (run) {
     const cycleTime = (sc.timer.value.milliseconds / 1000) % getCycleTime();
@@ -86,3 +95,11 @@ if (sc.timer.value.state === 'running') {
     commercialTO = setTimeout(playCommercial, 1000 * timeLeft);
   }
 }
+
+nodecg().listenFor('disable', () => {
+  if (!disabled.value) {
+    disabled.value = true;
+    clearTimeout(commercialTO);
+    nodecg().log.info('[Commercial] Will no longer check for the remainder of the run');
+  }
+});

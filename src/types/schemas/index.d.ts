@@ -1,1 +1,1 @@
-export * from './exampleReplicant';
+export * from './disabled';

@@ -1,4 +1,4 @@
-import type { ExampleReplicant } from '@/types/schemas';
+import type { Disabled } from '@/types/schemas';
 import clone from 'clone';
 import type { ReplicantBrowser } from 'nodecg/types/browser';
 import Vue from 'vue';
@@ -8,15 +8,15 @@ import { getModule, Module, Mutation, VuexModule } from 'vuex-module-decorators'
 
 // Declaring replicants.
 export const reps: {
-  exampleReplicant: ReplicantBrowser<ExampleReplicant>;
+  disabled: ReplicantBrowser<Disabled>;
   [k: string]: ReplicantBrowser<unknown>;
 } = {
-  exampleReplicant: nodecg.Replicant('exampleReplicant'),
+  disabled: nodecg.Replicant('disabled'),
 };
 
 // All the replicant types.
 export interface ReplicantTypes {
-  exampleReplicant: ExampleReplicant;
+  disabled: Disabled;
 }
 
 @Module({ name: 'ReplicantModule', namespaced: true })
