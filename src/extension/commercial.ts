@@ -1,7 +1,7 @@
-import { Configschema } from 'configschema';
+import type { Configschema } from '@/types/schemas/configschema';
+import { get as nodecg } from '@/util/nodecg';
+import obs from '@/util/obs';
 import SpeedcontrolUtil from 'speedcontrol-util';
-import { get as nodecg } from './util/nodecg';
-import obs from './util/obs';
 
 const config = (nodecg().bundleConfig as Configschema);
 const sc = new SpeedcontrolUtil(nodecg());
