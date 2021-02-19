@@ -22,16 +22,35 @@
           "type": "string",
           "default": ""
         },
-        "commercialScene": {
+        "nonRunCommercialTriggerScene": {
           "type": "string",
           "default": "Intermission (commercials)",
-          "description": "Name of the scene in OBS you wish to run commercials on when switched to."
+          "description": "Name of the scene in OBS you wish to start running non-run based commercials on when switched to."
+        },
+        "nonRunCommercialScenes": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ],
+          "default": [
+            "Intermission",
+            "Intermission (commercials)"
+          ],
+          "description": "Name(s) of the scene(s) in OBS you wish to allow non-run based commercials to continue running on."
         }
       },
       "required": [
         "address",
         "password",
-        "commercialScene"
+        "nonRunCommercialTriggerScene",
+        "nonRunCommercialScenes"
       ]
     }
   },

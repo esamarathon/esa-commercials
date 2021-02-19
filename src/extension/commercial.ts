@@ -5,6 +5,9 @@ import SpeedcontrolUtil from 'speedcontrol-util';
 import { disabled } from './util/replicants';
 
 const config = (nodecg().bundleConfig as Configschema);
+const nonRunCommercialScenes = Array.isArray(config.obs.nonRunCommercialScenes)
+  ? config.obs.nonRunCommercialScenes
+  : [config.obs.nonRunCommercialScenes];
 const sc = new SpeedcontrolUtil(nodecg());
 let commercialTO: NodeJS.Timeout;
 let intermissionCommercialCount = 0;
@@ -55,14 +58,6 @@ async function playCommercial(): Promise<void> {
 }
 
 sc.on('timerStarted', () => {
-  // Stop running intermission commercial checks.
-  if (intermissionCommercialTO) {
-    clearTimeout(intermissionCommercialTO);
-    intermissionCommercialTO = null;
-    intermissionCommercialCount = 0;
-    nodecg().log.info('[Commercial] Will no longer check for commercial scene');
-  }
-
   // Start running normal run commercial checks.
   clearTimeout(commercialTO);
   disabled.value = false;
@@ -86,32 +81,56 @@ sc.on('timerReset', () => {
  */
 async function playBreakCommercials(): Promise<void> {
   try {
+    // If we're no longer on an appropriate scene, stop trying to play non-run commercials.
+    const scene = await obs.send('GetCurrentScene');
+    const isSceneNonRun = !!nonRunCommercialScenes.find((s) => scene.name.startsWith(s));
+    if (!isSceneNonRun) {
+      if (intermissionCommercialTO) {
+        clearTimeout(intermissionCommercialTO);
+        intermissionCommercialTO = null;
+        intermissionCommercialCount = 0;
+        nodecg().log.info('[Commercial] Will no longer check for non-run commercial scenes');
+      }
+      return;
+    }
     await sc.sendMessage('twitchStartCommercial', {
       duration: intermissionCommercialCount < 1 ? 180 : 30,
     });
     nodecg().log.info(
-      '[Commercial] Triggered due to commercial scene (count: %s)',
+      '[Commercial] Triggered due to non-run commercial scenes (count: %s)',
       intermissionCommercialCount + 1,
     );
   } catch (err) {
     nodecg().log.warn(
-      '[Commercial] Could not successfully be triggered for commercial scene (count: %s)',
+      '[Commercial] Could not successfully be triggered for non-run commercial scenes (count: %s)',
       intermissionCommercialCount + 1,
     );
     nodecg().log.debug(
-      '[Commercial] Could not successfully be triggered for commercial scene (count: %s):',
+      '[Commercial] Could not successfully be triggered for non-run commercial scenes (count: %s):',
       intermissionCommercialCount + 1, err,
     );
   }
   intermissionCommercialCount += 1;
-  const time = intermissionCommercialCount > 1 ? (8 * 60 * 1000) + (10 * 1000) : (11 * 60 * 1000);
+  const time = intermissionCommercialCount > 1
+    ? (8 * 60 * 1000) + (10 * 1000)
+    : (11 * 60 * 1000);
   intermissionCommercialTO = setTimeout(playBreakCommercials, time);
 }
 
 // Trigger a Twitch commercial when on the relevant scene.
 obs.on('SwitchScenes', async (data) => {
-  if (data['scene-name'].startsWith(config.obs.commercialScene) && !intermissionCommercialTO) {
+  if (data['scene-name'].startsWith(config.obs.nonRunCommercialTriggerScene)
+  && !intermissionCommercialTO) {
     playBreakCommercials();
+  }
+
+  // Stop running intermission commercial checks if scene isn't one we expect for it.
+  const isSceneNonRun = !!nonRunCommercialScenes.find((s) => data['scene-name'].startsWith(s));
+  if (!isSceneNonRun && intermissionCommercialTO) {
+    clearTimeout(intermissionCommercialTO);
+    intermissionCommercialTO = null;
+    intermissionCommercialCount = 0;
+    nodecg().log.info('[Commercial] Will no longer check for non-run commercial scenes');
   }
 });
 

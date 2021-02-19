@@ -14,8 +14,12 @@ export interface Configschema {
 		address: string;
 		password: string;
 		/**
-		 * Name of the scene in OBS you wish to run commercials on when switched to.
+		 * Name of the scene in OBS you wish to start running non-run based commercials on when switched to.
 		 */
-		commercialScene: string;
+		nonRunCommercialTriggerScene: string;
+		/**
+		 * Name(s) of the scene(s) in OBS you wish to allow non-run based commercials to continue running on.
+		 */
+		nonRunCommercialScenes: string | string[];
 	};
 }
