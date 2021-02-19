@@ -70,16 +70,47 @@ sc.on('timerReset', () => {
   disabled.value = true;
 });
 
+/**
+ * Once triggers, loops every 8m10s until one loop isn't on the commercial scene.
+ */
+let intermissionCommercialCount = 0;
+let intermissionCommercialTO: NodeJS.Timeout | null = null;
+async function playBreakCommercials(): Promise<void> {
+  try {
+    // If we're no longer on the scene, stop trying to run commercials for it.
+    const scene = await obs.send('GetCurrentScene');
+    if (!scene.name.startsWith(config.obs.commercialScene) && intermissionCommercialTO) {
+      clearTimeout(intermissionCommercialTO);
+      intermissionCommercialTO = null;
+      intermissionCommercialCount = 0;
+      nodecg().log.info('[Commercial] Will no longer check for commercial scene');
+      return;
+    }
+    await sc.sendMessage('twitchStartCommercial', {
+      duration: intermissionCommercialCount < 1 ? 180 : 60,
+    });
+    nodecg().log.info(
+      '[Commercial] Triggered due to commercial scene (count: %s)',
+      intermissionCommercialCount + 1,
+    );
+  } catch (err) {
+    nodecg().log.warn(
+      '[Commercial] Could not successfully be triggered for commercial scene (count: %s)',
+      intermissionCommercialCount + 1,
+    );
+    nodecg().log.debug(
+      '[Commercial] Could not successfully be triggered for commercial scene (count: %s):',
+      intermissionCommercialCount + 1, err,
+    );
+  }
+  intermissionCommercialCount += 1;
+  intermissionCommercialTO = setTimeout(playBreakCommercials, (8 * 60 * 1000) + (10 * 1000));
+}
+
 // Trigger a Twitch commercial when on the relevant scene.
 obs.on('SwitchScenes', async (data) => {
-  if (data['scene-name'].startsWith(config.obs.commercialScene)) {
-    try {
-      await sc.sendMessage('twitchStartCommercial', { duration: 180 });
-      nodecg().log.info('[Commercial] Triggered on change to relevant scene');
-    } catch (err) {
-      nodecg().log.warn('[Commercial] Could not successfully be triggered');
-      nodecg().log.debug('[Commercial] Could not successfully be triggered:', err);
-    }
+  if (data['scene-name'].startsWith(config.obs.commercialScene) && !intermissionCommercialTO) {
+    playBreakCommercials();
   }
 });
 
