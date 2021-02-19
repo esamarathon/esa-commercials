@@ -87,7 +87,7 @@ sc.on('timerReset', () => {
 async function playBreakCommercials(): Promise<void> {
   try {
     await sc.sendMessage('twitchStartCommercial', {
-      duration: intermissionCommercialCount < 1 ? 180 : 60,
+      duration: intermissionCommercialCount < 1 ? 180 : 30,
     });
     nodecg().log.info(
       '[Commercial] Triggered due to commercial scene (count: %s)',
