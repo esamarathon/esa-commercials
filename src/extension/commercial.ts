@@ -7,6 +7,8 @@ import { disabled } from './util/replicants';
 const config = (nodecg().bundleConfig as Configschema);
 const sc = new SpeedcontrolUtil(nodecg());
 let commercialTO: NodeJS.Timeout;
+let intermissionCommercialCount = 0;
+let intermissionCommercialTO: NodeJS.Timeout | null = null;
 
 /**
  * Cycle time can change depending on which stream and current timer.
@@ -53,6 +55,15 @@ async function playCommercial(): Promise<void> {
 }
 
 sc.on('timerStarted', () => {
+  // Stop running intermission commercial checks.
+  if (intermissionCommercialTO) {
+    clearTimeout(intermissionCommercialTO);
+    intermissionCommercialTO = null;
+    intermissionCommercialCount = 0;
+    nodecg().log.info('[Commercial] Will no longer check for commercial scene');
+  }
+
+  // Start running normal run commercial checks.
   clearTimeout(commercialTO);
   disabled.value = false;
   nodecg().log.info('[Commercial] Will check if we can trigger in'
@@ -71,21 +82,10 @@ sc.on('timerReset', () => {
 });
 
 /**
- * Once triggers, loops every 8m10s until one loop isn't on the commercial scene.
+ * Once triggers, loops every 11m/8m10s until the loop is stopped elsewhere.
  */
-let intermissionCommercialCount = 0;
-let intermissionCommercialTO: NodeJS.Timeout | null = null;
 async function playBreakCommercials(): Promise<void> {
   try {
-    // If we're no longer on the scene, stop trying to run commercials for it.
-    const scene = await obs.send('GetCurrentScene');
-    if (!scene.name.startsWith(config.obs.commercialScene) && intermissionCommercialTO) {
-      clearTimeout(intermissionCommercialTO);
-      intermissionCommercialTO = null;
-      intermissionCommercialCount = 0;
-      nodecg().log.info('[Commercial] Will no longer check for commercial scene');
-      return;
-    }
     await sc.sendMessage('twitchStartCommercial', {
       duration: intermissionCommercialCount < 1 ? 180 : 60,
     });
@@ -104,7 +104,8 @@ async function playBreakCommercials(): Promise<void> {
     );
   }
   intermissionCommercialCount += 1;
-  intermissionCommercialTO = setTimeout(playBreakCommercials, (8 * 60 * 1000) + (10 * 1000));
+  const time = intermissionCommercialCount > 1 ? (8 * 60 * 1000) + (10 * 1000) : (11 * 60 * 1000);
+  intermissionCommercialTO = setTimeout(playBreakCommercials, time);
 }
 
 // Trigger a Twitch commercial when on the relevant scene.
