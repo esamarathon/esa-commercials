@@ -21,8 +21,8 @@
     "watch": "tsc -b tsconfig.extension.json -w"
   },
   "dependencies": {
-    "obs-websocket-js": "^4.0.2",
-    "speedcontrol-util": "https://github.com/speedcontrol/speedcontrol-util.git#dev-built"
+    "obs-websocket-js": "git+https://git@github.com/zoton2/obs-websocket-js.git#e0a892917d23facd386fd901da812cb5384d6c20",
+    "speedcontrol-util": "git+https://git@github.com/speedcontrol/speedcontrol-util.git#dev-built"
   },
   "devDependencies": {
     "@types/needle": "^2.5.1",
