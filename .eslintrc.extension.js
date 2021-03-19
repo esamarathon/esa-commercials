@@ -30,12 +30,6 @@ module.exports = {
     'import/extensions': ['.js', '.jsx', '.ts', '.tsx'],
   },
   rules: {
-    'import/no-extraneous-dependencies': ['error', {
-      // Some places have dev dependencies imported where eslint complains.
-      // devDependencies: true,
-      // Check for dependencies in NodeCG folder as well.
-      packageDir: ['.', '../..'],
-    }],
     '@typescript-eslint/lines-between-class-members': 'off',
     // max-len set to ignore "import" lines (as they usually get long and messy).
     'max-len': ['error', { code: 100, ignorePattern: '^import\\s.+\\sfrom\\s.+;$' }],
@@ -58,6 +52,8 @@ module.exports = {
       '@typescript-eslint/no-unused-vars': 'off',
       // Sometimes eslint complains about this for types (usually when using namespaces).
       'import/prefer-default-export': 'off',
+      // Types are only used for development (usually!) so dev dependencies are fine.
+      'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
     }
   }],
 };

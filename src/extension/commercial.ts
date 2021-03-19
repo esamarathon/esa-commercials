@@ -1,4 +1,4 @@
-import type { Configschema } from '@/types/schemas/configschema';
+import type { Configschema } from '@/types/schemas';
 import { get as nodecg } from '@/util/nodecg';
 import obs from '@/util/obs';
 import SpeedcontrolUtil from 'speedcontrol-util';
