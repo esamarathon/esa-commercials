@@ -76,7 +76,7 @@ jobs:
     - name: Commit built files
       working-directory: ./nodecg/bundles/esa-commercials
       run: |
-        git add -f extension
+        git add -f dashboard extension
         git commit -m "Built files" -a
 
     # Pushes the built files to a specific branch
