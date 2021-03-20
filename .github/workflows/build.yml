@@ -1,0 +1,80 @@
+name: Build
+
+on:
+  push:
+    branches: [ master ]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Checkout NodeCG
+    - name: Checkout nodecg/nodecg
+      uses: actions/checkout@v2
+      with:
+        token: ${{ secrets['GH_PAT'] }}
+        repository: nodecg/nodecg
+        path: ./nodecg-temp
+    
+    # Copies checked out NodeCG into permanent folder.
+    # If I didn't do this, some bundles seemed to not actually checkout successfully later. 
+    - name: Copy ./nodecg-temp > ./nodecg
+      run: cp -r ./nodecg-temp ./nodecg
+
+    # Checkout this repository
+    - name: Checkout this repository
+      uses: actions/checkout@v2
+      with:
+        path: ./nodecg/bundles/esa-commercials
+
+    # Set the local git user config to use the GitHub Actions bot account
+    - name: Set local git config user details
+      working-directory: ./nodecg/bundles/esa-commercials
+      run: |
+        git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+
+    # Setup some Node stuff
+    - name: Node.js setup
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+    
+    # Update NPM to the latest version
+    - name: Update NPM installation
+      run: npm install -g npm@latest
+
+    # Setup GitHub SSH key so we can npm install GitHub repositories (even needed for public ones)
+    - name: GitHub SSH setup
+      uses: webfactory/ssh-agent@master
+      with:
+        ssh-private-key: ${{ secrets['GH_SSH'] }}
+
+    # Install NPM dependencies
+    - name: Install NPM dependencies
+      working-directory: ./nodecg/bundles/esa-commercials
+      run: npm ci
+
+    # Actually build everything
+    - name: Build
+      working-directory: ./nodecg/bundles/esa-commercials
+      run: npm run build
+
+    # Commit newly built files
+    - name: Commit built files
+      working-directory: ./nodecg/bundles/esa-commercials
+      run: |
+        git add -f extension
+        git commit -m "Built files" -a
+
+    # Pushes the built files to a specific branch
+    - name: Push built files to "build" branch
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets['GH_PAT'] }}
+        branch: build
+        force: true
+        directory: ./nodecg/bundles/esa-commercials
