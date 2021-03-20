@@ -1,4 +1,4 @@
-import { Configschema } from 'configschema';
+import type { Configschema } from '@/types/schemas/configschema';
 import OBSWebSocketJS from 'obs-websocket-js';
 import { get as nodecg } from './nodecg';
 
@@ -27,6 +27,7 @@ obs.on('ConnectionClosed', () => {
   setTimeout(connect, 5000);
 });
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore: Pretty sure this emits an error.
 obs.on('error', (err) => {
   nodecg().log.warn('[OBS] Connection error');
