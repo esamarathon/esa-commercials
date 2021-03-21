@@ -81,7 +81,9 @@ jobs:
     # Actually build everything
     - name: Build
       working-directory: ./nodecg/bundles/esa-commercials
-      run: npm run build
+      run: |
+        npm run clean
+        npm run build
 
     # Commit newly built files
     # This can "fail" if there are no newly changed/built files, but the next step should continue anyway.
