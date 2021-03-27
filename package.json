@@ -29,7 +29,7 @@
   "dependencies": {
     "module-alias": "^2.2.2",
     "obs-websocket-js": "git+https://git@github.com/zoton2/obs-websocket-js.git#e0a892917d23facd386fd901da812cb5384d6c20",
-    "speedcontrol-util": "^0.6.0-RC1"
+    "speedcontrol-util": "^0.6.0-RC2"
   },
   "devDependencies": {
     "@mdi/font": "^5.9.55",
