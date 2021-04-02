@@ -12,9 +12,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const nodecg_1 = require("@/util/nodecg");
-const obs_1 = __importDefault(require("@/util/obs"));
 const speedcontrol_util_1 = __importDefault(require("speedcontrol-util"));
+const nodecg_1 = require("./util/nodecg");
+const obs_1 = __importDefault(require("./util/obs"));
 const replicants_1 = require("./util/replicants");
 const config = nodecg_1.get().bundleConfig;
 const nonRunCommercialScenes = Array.isArray(config.obs.nonRunCommercialScenes)

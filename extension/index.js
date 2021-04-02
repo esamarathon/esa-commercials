@@ -3,8 +3,8 @@
 // This must go first so we can use module aliases!
 /* eslint-disable import/first */
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-require('module-alias').addAlias('@', require('path').join(__dirname, '.'));
-const nodecg_1 = require("@/util/nodecg");
+require('module-alias').addAlias('@esa-commercials', require('path').join(__dirname, '.'));
+const nodecg_1 = require("./util/nodecg");
 module.exports = (nodecg) => {
     /**
      * Because of how `import`s work, it helps to use `require`s to force
