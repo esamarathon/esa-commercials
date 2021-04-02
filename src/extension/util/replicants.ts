@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 
-import type { Disabled } from '@/types/schemas';
+import type { Disabled } from '@esa-commercials/types/schemas';
 import { get as nodecg } from './nodecg';
 
 /**

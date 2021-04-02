@@ -1,5 +1,5 @@
-import { ReplicantModule, ReplicantTypes } from '@/browser_shared/replicant_store';
-import { Disabled } from '@/types/schemas';
+import { ReplicantModule, ReplicantTypes } from '@esa-commercials/browser_shared/replicant_store';
+import { Disabled } from '@esa-commercials/types/schemas';
 import Vue from 'vue';
 import Vuex, { Store } from 'vuex';
 import { getModule, Module, VuexModule } from 'vuex-module-decorators';

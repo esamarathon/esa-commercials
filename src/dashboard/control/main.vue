@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import { Disabled } from '@/types/schemas';
+import { Disabled } from '@esa-commercials/types/schemas';
 import { Vue, Component } from 'vue-property-decorator';
 import { Getter } from 'vuex-class';
 

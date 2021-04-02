@@ -1,4 +1,4 @@
-import type { Disabled } from '@/types/schemas';
+import type { Disabled } from '@esa-commercials/types/schemas';
 import clone from 'clone';
 import type { ReplicantBrowser } from 'nodecg/types/browser';
 import Vue from 'vue';
