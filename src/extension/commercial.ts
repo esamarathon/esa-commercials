@@ -1,7 +1,7 @@
-import type { Configschema } from '@/types/schemas';
-import { get as nodecg } from '@/util/nodecg';
-import obs from '@/util/obs';
+import type { Configschema } from '@esa-commercials/types/schemas';
 import SpeedcontrolUtil from 'speedcontrol-util';
+import { get as nodecg } from './util/nodecg';
+import obs from './util/obs';
 import { disabled } from './util/replicants';
 
 const config = (nodecg().bundleConfig as Configschema);

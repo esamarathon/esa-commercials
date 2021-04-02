@@ -1,4 +1,4 @@
-import type { Configschema } from '@/types/schemas/configschema';
+import type { Configschema } from '@esa-commercials/types/schemas/configschema';
 import OBSWebSocketJS from 'obs-websocket-js';
 import { get as nodecg } from './nodecg';
 
