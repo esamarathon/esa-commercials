@@ -28,7 +28,7 @@ function getCycleTime(): number {
 }
 
 /**
- * Will attempt to play a commercial if >20 minutes is left for the run
+ * Will attempt to play a commercial if >19 minutes is left for the run
  * and the estimate is higher than 60 minutes.
  */
 async function checkForCommercial(): Promise<void> {
@@ -42,7 +42,7 @@ async function checkForCommercial(): Promise<void> {
   }
   if (nextCommercialStamp <= Date.now()) {
     const timeLeft = run.estimateS - (sc.timer.value.milliseconds / 1000);
-    if (run.estimateS > (60 * 60) && timeLeft > (60 * 20)) {
+    if (run.estimateS > (60 * 60) && timeLeft > (60 * 19)) {
       try {
         if (toggle.value) {
           await sc.sendMessage('twitchStartCommercial', { duration: 60 });
