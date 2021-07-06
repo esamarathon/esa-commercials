@@ -2,7 +2,7 @@ import type { Configschema } from '@esa-commercials/types/schemas';
 import SpeedcontrolUtil from 'speedcontrol-util';
 import { get as nodecg } from './util/nodecg';
 import obs from './util/obs';
-import { disabled } from './util/replicants';
+import { disabled, toggle } from './util/replicants';
 
 const config = (nodecg().bundleConfig as Configschema);
 const nonRunCommercialScenes = Array.isArray(config.obs.nonRunCommercialScenes)
@@ -41,8 +41,10 @@ async function playCommercial(): Promise<void> {
   if (run.estimateS && run.estimateS > (60 * (40 - 1)) && timeLeft > (60 * 20)) {
     const cycleTime = getCycleTime();
     try {
-      await sc.sendMessage('twitchStartCommercial', { duration: 60 });
-      nodecg().log.info('[Commercial] Triggered successfully');
+      if (toggle.value) {
+        await sc.sendMessage('twitchStartCommercial', { duration: 60 });
+        nodecg().log.info('[Commercial] Triggered successfully');
+      }
     } catch (err) {
       nodecg().log.warn('[Commercial] Could not successfully be triggered');
       nodecg().log.debug('[Commercial] Could not successfully be triggered:', err);
@@ -93,13 +95,15 @@ async function playBreakCommercials(): Promise<void> {
       }
       return;
     }
-    await sc.sendMessage('twitchStartCommercial', {
-      duration: intermissionCommercialCount < 1 ? 180 : 30,
-    });
-    nodecg().log.info(
-      '[Commercial] Triggered due to non-run commercial scenes (count: %s)',
-      intermissionCommercialCount + 1,
-    );
+    if (toggle.value) {
+      await sc.sendMessage('twitchStartCommercial', {
+        duration: intermissionCommercialCount < 1 ? 180 : 30,
+      });
+      nodecg().log.info(
+        '[Commercial] Triggered due to non-run commercial scenes (count: %s)',
+        intermissionCommercialCount + 1,
+      );
+    }
   } catch (err) {
     nodecg().log.warn(
       '[Commercial] Could not successfully be triggered for non-run commercial scenes (count: %s)',

@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 
-import type { Disabled } from '@esa-commercials/types/schemas';
+import type { Disabled, Toggle } from '@esa-commercials/types/schemas';
 import { get as nodecg } from './nodecg';
 
 /**
@@ -8,6 +8,5 @@ import { get as nodecg } from './nodecg';
  * and to make sure they have any correct settings on startup.
  */
 
-// YOU CAN REMOVE THIS RULE WHEN YOU GET MULTIPLE REPLICANTS!
-// eslint-disable-next-line import/prefer-default-export
 export const disabled = nodecg().Replicant<Disabled>('disabled');
+export const toggle = nodecg().Replicant<Toggle>('toggle');
