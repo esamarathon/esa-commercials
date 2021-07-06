@@ -21,69 +21,77 @@ const nonRunCommercialScenes = Array.isArray(config.obs.nonRunCommercialScenes)
     ? config.obs.nonRunCommercialScenes
     : [config.obs.nonRunCommercialScenes];
 const sc = new speedcontrol_util_1.default(nodecg_1.get());
-let commercialTO;
+let nextCommercialStamp = 0;
+let commercialInterval;
 let intermissionCommercialCount = 0;
 let intermissionCommercialTO = null;
 /**
  * Cycle time can change depending on which stream and current timer.
  */
 function getCycleTime() {
-    if (config.thisEvent === 2) {
-        return 30 * 60;
+    if (sc.timer.value.milliseconds < (60 * 60 * 1000)) {
+        return 60 * 60; // 1 hour
     }
-    return (sc.timer.value.milliseconds > (59 * 60 * 1000) ? 15 : 20) * 60;
+    if (config.thisEvent === 2) {
+        return 30 * 60; // 30 minutes
+    }
+    return 15 * 60; // 15 minutes
 }
 /**
- * Will attempt to play a commercial if >19 minutes is left for the run
- * and the estimate is higher than 39 minutes.
+ * Will attempt to play a commercial if >20 minutes is left for the run
+ * and the estimate is higher than 60 minutes.
  */
-function playCommercial() {
+function checkForCommercial() {
     return __awaiter(this, void 0, void 0, function* () {
         // We shouldn't be running at all, but just in case and it's disabled, don't go further.
         if (replicants_1.disabled.value) {
             return;
         }
         const run = sc.getCurrentRun();
-        if (!run) {
+        if (!(run === null || run === void 0 ? void 0 : run.estimateS)) {
             return;
         }
-        const timeLeft = run && run.estimateS
-            ? (run.estimateS + 60) - (sc.timer.value.milliseconds / 1000) : 0;
-        if (run.estimateS && run.estimateS > (60 * (40 - 1)) && timeLeft > (60 * 20)) {
-            const cycleTime = getCycleTime();
-            try {
-                yield sc.sendMessage('twitchStartCommercial', { duration: 60 });
-                nodecg_1.get().log.info('[Commercial] Triggered successfully');
+        if (nextCommercialStamp <= Date.now()) {
+            const timeLeft = run.estimateS - (sc.timer.value.milliseconds / 1000);
+            if (run.estimateS > (60 * 60) && timeLeft > (60 * 20)) {
+                try {
+                    if (replicants_1.toggle.value) {
+                        yield sc.sendMessage('twitchStartCommercial', { duration: 60 });
+                        nodecg_1.get().log.info('[Commercial] Triggered successfully');
+                    }
+                }
+                catch (err) {
+                    nodecg_1.get().log.warn('[Commercial] Could not successfully be triggered');
+                    nodecg_1.get().log.debug('[Commercial] Could not successfully be triggered:', err);
+                }
+                nextCommercialStamp = Date.now() + (getCycleTime() * 1000);
+                nodecg_1.get().log.info('[Commercial] Will check again'
+                    + ` in ${Math.floor(getCycleTime() / 60)} minutes`);
             }
-            catch (err) {
-                nodecg_1.get().log.warn('[Commercial] Could not successfully be triggered');
-                nodecg_1.get().log.debug('[Commercial] Could not successfully be triggered:', err);
+            else {
+                nodecg_1.get().log.info('[Commercial] Does not need to be triggered,'
+                    + ' will not check again for this run');
+                clearTimeout(commercialInterval);
+                replicants_1.disabled.value = true;
             }
-            commercialTO = setTimeout(playCommercial, 1000 * cycleTime);
-            nodecg_1.get().log.info('[Commercial] Will check again'
-                + ` in ${Math.floor(cycleTime / 60)} minutes`);
-        }
-        else {
-            nodecg_1.get().log.info('[Commercial] Does not need to be triggered,'
-                + ' will not check again for this run');
-            replicants_1.disabled.value = true;
         }
     });
 }
 sc.on('timerStarted', () => {
     // Start running normal run commercial checks.
-    clearTimeout(commercialTO);
+    clearTimeout(commercialInterval);
     replicants_1.disabled.value = false;
+    nextCommercialStamp = Date.now() + (getCycleTime() * 1000);
     nodecg_1.get().log.info('[Commercial] Will check if we can trigger in'
         + ` ${Math.floor(getCycleTime() / 60)} minutes`);
-    commercialTO = setTimeout(playCommercial, 1000 * getCycleTime());
+    commercialInterval = setInterval(checkForCommercial, 1000);
 });
 sc.on('timerStopped', () => {
-    clearTimeout(commercialTO);
+    clearTimeout(commercialInterval);
     replicants_1.disabled.value = true;
 });
 sc.on('timerReset', () => {
-    clearTimeout(commercialTO);
+    clearTimeout(commercialInterval);
     replicants_1.disabled.value = true;
 });
 /**
@@ -104,10 +112,12 @@ function playBreakCommercials() {
                 }
                 return;
             }
-            yield sc.sendMessage('twitchStartCommercial', {
-                duration: intermissionCommercialCount < 1 ? 180 : 30,
-            });
-            nodecg_1.get().log.info('[Commercial] Triggered due to non-run commercial scenes (count: %s)', intermissionCommercialCount + 1);
+            if (replicants_1.toggle.value) {
+                yield sc.sendMessage('twitchStartCommercial', {
+                    duration: intermissionCommercialCount < 1 ? 300 : 30, // 5 minutes / 30 seconds
+                });
+                nodecg_1.get().log.info('[Commercial] Triggered due to non-run commercial scenes (count: %s)', intermissionCommercialCount + 1);
+            }
         }
         catch (err) {
             nodecg_1.get().log.warn('[Commercial] Could not successfully be triggered for non-run commercial scenes (count: %s)', intermissionCommercialCount + 1);
@@ -142,15 +152,16 @@ if (sc.timer.value.state === 'running' && !replicants_1.disabled.value) {
     if (run) {
         const cycleTime = (sc.timer.value.milliseconds / 1000) % getCycleTime();
         const timeLeft = (getCycleTime() - cycleTime);
+        nextCommercialStamp = Date.now() + (timeLeft * 1000);
         nodecg_1.get().log.info('[Commercial] Will check if we can trigger in'
             + ` ~${Math.round(timeLeft / 60)} minutes`);
-        commercialTO = setTimeout(playCommercial, 1000 * timeLeft);
+        commercialInterval = setInterval(checkForCommercial, 1000);
     }
 }
 nodecg_1.get().listenFor('disable', () => {
     if (!replicants_1.disabled.value) {
-        replicants_1.disabled.value = true;
-        clearTimeout(commercialTO);
         nodecg_1.get().log.info('[Commercial] Will no longer check for the remainder of the run');
+        clearTimeout(commercialInterval);
+        replicants_1.disabled.value = true;
     }
 });
