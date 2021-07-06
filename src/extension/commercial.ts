@@ -103,7 +103,7 @@ async function playBreakCommercials(): Promise<void> {
     }
     if (toggle.value) {
       await sc.sendMessage('twitchStartCommercial', {
-        duration: intermissionCommercialCount < 1 ? 180 : 30, // TODO: change 180 (3m) to 300 (5m)
+        duration: intermissionCommercialCount < 1 ? 300 : 30, // 5 minutes / 30 seconds
       });
       nodecg().log.info(
         '[Commercial] Triggered due to non-run commercial scenes (count: %s)',
