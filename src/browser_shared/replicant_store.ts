@@ -1,4 +1,4 @@
-import type { Disabled } from '@esa-commercials/types/schemas';
+import type { Disabled, Toggle } from '@esa-commercials/types/schemas';
 import clone from 'clone';
 import type { ReplicantBrowser } from 'nodecg/types/browser';
 import Vue from 'vue';
@@ -9,14 +9,17 @@ import { getModule, Module, Mutation, VuexModule } from 'vuex-module-decorators'
 // Declaring replicants.
 export const reps: {
   disabled: ReplicantBrowser<Disabled>;
+  toggle: ReplicantBrowser<Toggle>;
   [k: string]: ReplicantBrowser<unknown>;
 } = {
   disabled: nodecg.Replicant('disabled'),
+  toggle: nodecg.Replicant('toggle'),
 };
 
 // All the replicant types.
 export interface ReplicantTypes {
   disabled: Disabled;
+  toggle: Toggle;
 }
 
 @Module({ name: 'ReplicantModule', namespaced: true })
