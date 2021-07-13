@@ -23,8 +23,9 @@ async function checkForCommercial(): Promise<void> {
   if (disabled.value || !cycles.value || !run?.estimateS) {
     return;
   }
-  const timerS = (sc.timer.value.milliseconds / 1000);
-  if ((cycles.value.frequency * cycles.value.countIndex + 1) > timerS) {
+  const timerS = sc.timer.value.milliseconds / 1000;
+  const nextCycle = cycles.value.frequency * (cycles.value.countIndex + 1);
+  if (nextCycle < timerS) {
     cycles.value.countIndex += 1;
     if (toggle.value) {
       try {
@@ -63,7 +64,7 @@ sc.on('timerStarted', () => {
   }
   // Calculate frequency and count, and store this information.
   const count = Math.round(run.estimateS / (2 * 60 * 60));
-  const freq = run.estimateS / (count + 1);
+  const freq = Math.round(run.estimateS / (count + 1));
   cycles.value = {
     runId: run.id,
     frequency: freq,
