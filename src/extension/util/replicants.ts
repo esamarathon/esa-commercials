@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 
-import type { Disabled, Toggle } from '@esa-commercials/types/schemas';
+import { Cycles, Disabled, Toggle } from '@esa-commercials/types/schemas';
 import { get as nodecg } from './nodecg';
 
 /**
@@ -8,5 +8,6 @@ import { get as nodecg } from './nodecg';
  * and to make sure they have any correct settings on startup.
  */
 
+export const cycles = nodecg().Replicant<Cycles>('cycles');
 export const disabled = nodecg().Replicant<Disabled>('disabled');
 export const toggle = nodecg().Replicant<Toggle>('toggle');

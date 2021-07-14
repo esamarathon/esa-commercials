@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "oneOf": [
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "runId": {
+          "type": "string"
+        },
+        "frequency": {
+          "type": "number"
+        },
+        "countIndex": {
+          "type": "number"
+        },
+        "countTotal": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "runId",
+        "frequency",
+        "countIndex",
+        "countTotal"
+      ]
+    },
+    {
+      "type": "null"
+    }
+  ],
+  "default": null
+}

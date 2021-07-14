@@ -14,19 +14,48 @@
     <v-btn @click="disable" :disabled="disabled">
       Disable Commercials (rest of run)
     </v-btn>
+    <div class="ma-2 mb-0">
+      <div v-if="cycles">
+        <span class="font-weight-bold">Commercial frequency</span>:
+          ~{{ Math.round(frequency / 60) }}m
+        <br><span class="font-weight-bold">Next commercial</span>:
+          ~{{ Math.round(nextCommercial / 60) }}m
+        <br><span class="font-weight-bold">Planned commercials played:</span>
+          {{ cycles.countIndex }}/{{ cycles.countTotal }}
+      </div>
+      <div v-else class="font-italic">
+        No commercial cycle is currently running.
+      </div>
+    </div>
   </v-app>
 </template>
 
 <script lang="ts">
 import { replicantModule, ReplicantTypes } from '@esa-commercials/browser_shared/replicant_store';
-import { Disabled, Toggle } from '@esa-commercials/types/schemas';
+import { Cycles, Disabled, Toggle } from '@esa-commercials/types/schemas';
 import { Vue, Component } from 'vue-property-decorator';
 import { Getter } from 'vuex-class';
+import { SpeedcontrolUtilBrowser } from 'speedcontrol-util';
+import { Timer } from 'speedcontrol-util/types';
+import clone from 'clone';
+
+const sc = new SpeedcontrolUtilBrowser(nodecg);
 
 @Component
 export default class extends Vue {
   @Getter reps!: ReplicantTypes;
   @Getter disabled!: Disabled;
+  @Getter cycles!: Cycles;
+  runTimer: Timer | null = null;
+
+  get frequency(): number {
+    return this.cycles?.frequency ?? 0;
+  }
+
+  get nextCommercial(): number {
+    const timerS = (this.runTimer?.milliseconds ?? 0) / 1000;
+    return this.frequency - (timerS % this.frequency);
+  }
 
   get toggle(): Toggle {
     return this.reps.toggle;
@@ -37,6 +66,10 @@ export default class extends Vue {
 
   disable(): void {
     nodecg.sendMessage('disable');
+  }
+
+  created(): void {
+    sc.timer.on('change', (val) => Vue.set(this, 'runTimer', clone(val) ?? null));
   }
 }
 </script>

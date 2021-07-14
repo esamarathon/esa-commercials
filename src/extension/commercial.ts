@@ -2,85 +2,90 @@ import type { Configschema } from '@esa-commercials/types/schemas';
 import SpeedcontrolUtil from 'speedcontrol-util';
 import { get as nodecg } from './util/nodecg';
 import obs from './util/obs';
-import { disabled, toggle } from './util/replicants';
+import { cycles, disabled, toggle } from './util/replicants';
 
 const config = (nodecg().bundleConfig as Configschema);
 const nonRunCommercialScenes = Array.isArray(config.obs.nonRunCommercialScenes)
   ? config.obs.nonRunCommercialScenes
   : [config.obs.nonRunCommercialScenes];
 const sc = new SpeedcontrolUtil(nodecg());
-let nextCommercialStamp = 0;
 let commercialInterval: NodeJS.Timeout;
 let intermissionCommercialCount = 0;
 let intermissionCommercialTO: NodeJS.Timeout | null = null;
 
 /**
- * Cycle time can change depending on which stream and current timer.
- */
-function getCycleTime(): number {
-  if (sc.timer.value.milliseconds < (60 * 60 * 1000)) {
-    return 60 * 60; // 1 hour
-  }
-  if (config.thisEvent === 2) {
-    return 30 * 60; // 30 minutes
-  }
-  return 15 * 60; // 15 minutes
-}
-
-/**
- * Will attempt to play a commercial if >19 minutes is left for the run
- * and the estimate is higher than 60 minutes.
+ * Will attempt to play a commercial at the points calculated on timer start.
  */
 async function checkForCommercial(): Promise<void> {
-  // We shouldn't be running at all, but just in case and it's disabled, don't go further.
-  if (disabled.value) {
-    return;
-  }
   const run = sc.getCurrentRun();
-  if (!run?.estimateS) {
+
+  // We shouldn't be running at all, but just in case and it's disabled, don't go further.
+  if (disabled.value || !cycles.value || !run?.estimateS) {
     return;
   }
-  if (nextCommercialStamp <= Date.now()) {
-    const timeLeft = run.estimateS - (sc.timer.value.milliseconds / 1000);
-    if (run.estimateS > (60 * 60) && timeLeft > (60 * 19)) {
+  const timerS = sc.timer.value.milliseconds / 1000;
+  const nextCycle = cycles.value.frequency * (cycles.value.countIndex + 1);
+  if (nextCycle < timerS) {
+    cycles.value.countIndex += 1;
+    if (toggle.value) {
       try {
-        if (toggle.value) {
-          await sc.sendMessage('twitchStartCommercial', { duration: 60 });
-          nodecg().log.info('[Commercial] Triggered successfully');
-        }
+        await sc.sendMessage('twitchStartCommercial', { duration: 60 });
+        nodecg().log.info('[Commercial] Triggered successfully');
       } catch (err) {
         nodecg().log.warn('[Commercial] Could not successfully be triggered');
         nodecg().log.debug('[Commercial] Could not successfully be triggered:', err);
       }
-      nextCommercialStamp = Date.now() + (getCycleTime() * 1000);
-      nodecg().log.info('[Commercial] Will check again'
-        + ` in ${Math.floor(getCycleTime() / 60)} minutes`);
+    }
+    if (cycles.value.countIndex < cycles.value.countTotal) {
+      nodecg().log.info('[Commercial] Will run again in '
+      + `~${Math.round(cycles.value.frequency / 60)} minutes`);
     } else {
-      nodecg().log.info('[Commercial] Does not need to be triggered,'
-        + ' will not check again for this run');
+      nodecg().log.info('[Commercial] Cycles complete, '
+        + 'no more will be run for the remainder of the run');
       clearTimeout(commercialInterval);
+      cycles.value = null;
       disabled.value = true;
     }
   }
 }
 
 sc.on('timerStarted', () => {
-  // Start running normal run commercial checks.
   clearTimeout(commercialInterval);
+  const run = sc.getCurrentRun();
+
+  // Don't run any if no active run is available to check.
+  if (!run?.estimateS) {
+    return;
+  }
+  // Don't run any if the run is under 2 hours.
+  if (run.estimateS < (2 * 60 * 60)) {
+    nodecg().log.info('[Commercial] Will not run any as run is under 2 hours in length');
+    return;
+  }
+  // Calculate frequency and count, and store this information.
+  const count = Math.round(run.estimateS / (1 * 60 * 60)) - 1;
+  const freq = Math.round(run.estimateS / (count + 1));
+  cycles.value = {
+    runId: run.id,
+    frequency: freq,
+    countIndex: 0,
+    countTotal: count,
+  };
+
   disabled.value = false;
-  nextCommercialStamp = Date.now() + (getCycleTime() * 1000);
-  nodecg().log.info('[Commercial] Will check if we can trigger in'
-    + ` ${Math.floor(getCycleTime() / 60)} minutes`);
+  nodecg().log.info(`[Commercial] Will run in ~${Math.round(freq / 60)} minutes`);
   commercialInterval = setInterval(checkForCommercial, 1000);
 });
 
 sc.on('timerStopped', () => {
   clearTimeout(commercialInterval);
+  cycles.value = null;
   disabled.value = true;
 });
 
 sc.on('timerReset', () => {
   clearTimeout(commercialInterval);
+  cycles.value = null;
   disabled.value = true;
 });
 
@@ -146,22 +151,33 @@ obs.on('SwitchScenes', async (data) => {
 
 // If the timer has been recovered on start up,
 // need to make sure the commercial checking is going to run.
-if (sc.timer.value.state === 'running' && !disabled.value) {
+if (sc.timer.value.state === 'running' && !disabled.value && cycles.value) {
   const run = sc.getCurrentRun();
-  if (run) {
-    const cycleTime = (sc.timer.value.milliseconds / 1000) % getCycleTime();
-    const timeLeft = (getCycleTime() - cycleTime);
-    nextCommercialStamp = Date.now() + (timeLeft * 1000);
-    nodecg().log.info('[Commercial] Will check if we can trigger in'
-      + ` ~${Math.round(timeLeft / 60)} minutes`);
+  if (run && run.id !== cycles.value.runId) {
+    cycles.value = null;
+    disabled.value = true;
+    // TODO: Do the usual setup as a new run is being tracked (rare/impossible to happen).
+  } else if (run) {
+    nodecg().log.info('[Commercial] Will run in '
+      + `~${Math.round(cycles.value.frequency / 60)} minutes`);
     commercialInterval = setInterval(checkForCommercial, 1000);
   }
 }
 
+// Only used by esa-layouts so we can continue playing commercials once our video player
+// ones have finished. Once the video player has finished, will continue the cycle after 3m10s.
+nodecg().listenFor('videoPlayerFinished', 'esa-layouts', () => {
+  if (!intermissionCommercialTO) {
+    intermissionCommercialCount += 1;
+    intermissionCommercialTO = setTimeout(playBreakCommercials, (3 * 60 * 1000) + (10 * 1000));
+  }
+});
+
 nodecg().listenFor('disable', () => {
   if (!disabled.value) {
-    nodecg().log.info('[Commercial] Will no longer check for the remainder of the run');
+    nodecg().log.info('[Commercial] Will no longer run for the remainder of the run');
     clearTimeout(commercialInterval);
+    cycles.value = null;
     disabled.value = true;
   }
 });

@@ -1,5 +1,5 @@
 import { ReplicantModule, ReplicantTypes } from '@esa-commercials/browser_shared/replicant_store';
-import { Disabled } from '@esa-commercials/types/schemas';
+import { Cycles, Disabled } from '@esa-commercials/types/schemas';
 import Vue from 'vue';
 import Vuex, { Store } from 'vuex';
 import { getModule, Module, VuexModule } from 'vuex-module-decorators';
@@ -15,6 +15,10 @@ class OurModule extends VuexModule {
 
   get disabled(): Disabled {
     return this.reps.disabled;
+  }
+
+  get cycles(): Cycles {
+    return this.reps.cycles;
   }
 }
 
