@@ -63,7 +63,7 @@ sc.on('timerStarted', () => {
     return;
   }
   // Calculate frequency and count, and store this information.
-  const count = Math.round(run.estimateS / (2 * 60 * 60));
+  const count = Math.round(run.estimateS / (1 * 60 * 60)) - 1;
   const freq = Math.round(run.estimateS / (count + 1));
   cycles.value = {
     runId: run.id,
