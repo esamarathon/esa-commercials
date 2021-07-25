@@ -29,7 +29,7 @@ async function checkForCommercial(): Promise<void> {
     cycles.value.countIndex += 1;
     if (toggle.value) {
       try {
-        await sc.sendMessage('twitchStartCommercial', { duration: 60 });
+        await sc.sendMessage('twitchStartCommercial', { duration: 180 });
         nodecg().log.info('[Commercial] Triggered successfully');
       } catch (err) {
         nodecg().log.warn('[Commercial] Could not successfully be triggered');
@@ -166,6 +166,7 @@ if (sc.timer.value.state === 'running' && !disabled.value && cycles.value) {
 
 // Only used by esa-layouts so we can continue playing commercials once our video player
 // ones have finished. Once the video player has finished, will continue the cycle after 3m10s.
+// TODO: change to be smarter
 nodecg().listenFor('videoPlayerFinished', 'esa-layouts', () => {
   if (!intermissionCommercialTO) {
     intermissionCommercialCount += 1;
