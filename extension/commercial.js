@@ -40,7 +40,7 @@ function checkForCommercial() {
             replicants_1.cycles.value.countIndex += 1;
             if (replicants_1.toggle.value) {
                 try {
-                    yield sc.sendMessage('twitchStartCommercial', { duration: 60 });
+                    yield sc.sendMessage('twitchStartCommercial', { duration: 180 });
                     nodecg_1.get().log.info('[Commercial] Triggered successfully');
                 }
                 catch (err) {
@@ -165,6 +165,7 @@ if (sc.timer.value.state === 'running' && !replicants_1.disabled.value && replic
 }
 // Only used by esa-layouts so we can continue playing commercials once our video player
 // ones have finished. Once the video player has finished, will continue the cycle after 3m10s.
+// TODO: change to be smarter
 nodecg_1.get().listenFor('videoPlayerFinished', 'esa-layouts', () => {
     if (!intermissionCommercialTO) {
         intermissionCommercialCount += 1;
