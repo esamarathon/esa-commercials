@@ -10,6 +10,6 @@ module.exports = (nodecg) => {
      * Because of how `import`s work, it helps to use `require`s to force
      * things to be loaded *after* the NodeCG context is set.
      */
-    nodecg_1.set(nodecg);
+    (0, nodecg_1.set)(nodecg);
     require('./commercial');
 };
