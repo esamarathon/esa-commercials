@@ -9,9 +9,9 @@
 
 ## Installation
 
-This is a [NodeCG](https://nodecg.dev) v1.8.1 bundle. You will need to have NodeCG v1.8.1 or above installed to run it. It also requires you to install the [nodecg-speedcontrol](https://github.com/speedcontrol/nodecg-speedcontrol) bundle (at least v2.2.0).
+This is a [NodeCG](https://nodecg.dev) v1.8.1 bundle. You will need to have NodeCG v1.8.1 or above installed to run it. It also requires you to install the [nodecg-speedcontrol](https://github.com/speedcontrol/nodecg-speedcontrol) bundle (at least v2.4.0).
 
-This bundle relies on the [obs-websocket](https://github.com/Palakis/obs-websocket) plugin to detect scene changes, so make sure you have this installed (custom address/port and password can be specified in the bundle's config if needed).
+This bundle relies on the [obs-websocket](https://github.com/Palakis/obs-websocket) plugin (tested with v4.9.1) to detect scene changes, so make sure you have this installed (custom address/port and password can be specified in the bundle's config if needed).
 
 Install this bundle just like any other NodeCG bundle; if you have `nodecg-cli` you can:
 - Use `nodecg install esamarathon/esa-commercials`, then...

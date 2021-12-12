@@ -122,7 +122,8 @@ async function playBreakCommercials(): Promise<void> {
     );
     nodecg().log.debug(
       '[Commercial] Could not successfully be triggered for non-run commercial scenes (count: %s):',
-      intermissionCommercialCount + 1, err,
+      intermissionCommercialCount + 1,
+      err,
     );
   }
   intermissionCommercialCount += 1;
