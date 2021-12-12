@@ -8,6 +8,10 @@ module.exports = {
       root: './src/dashboard',
       package: '../../package.json',
     },
+    /* {
+      root: './src/graphics',
+      package: '../../package.json',
+    }, */
     {
       root: './src/browser_shared',
       package: '../../package.json',

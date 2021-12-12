@@ -1,7 +1,3 @@
-/**
- * Some stuff is commented out that may need re-enabling if necessary.
- */
-
 module.exports = {
   root: true,
   env: {
@@ -15,6 +11,7 @@ module.exports = {
     '@typescript-eslint',
   ],
   extends: [
+    'airbnb-base',
     'airbnb-typescript/base',
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
@@ -41,7 +38,6 @@ module.exports = {
       ts: 'never',
       tsx: 'never',
     }],
-    // 'import/no-unresolved': [2, { commonjs: true, caseSensitive: false }],
   },
 
   // Overrides for types.
