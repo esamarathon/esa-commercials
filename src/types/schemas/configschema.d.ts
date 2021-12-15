@@ -23,4 +23,16 @@ export interface Configschema {
 		 */
 		nonRunCommercialScenes: string | string[];
 	};
+	/**
+	 * Needed if using our external server to run commercials.
+	 */
+	server: {
+		enable: boolean;
+		address: string;
+		token: string;
+		/**
+		 * Name(s) of the channel(s) commercials shall be ran on.
+		 */
+		channels: string | [string, ...string[]];
+	};
 }
