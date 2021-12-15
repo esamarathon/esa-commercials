@@ -14,6 +14,10 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
+        "enable": {
+          "type": "boolean",
+          "default": true
+        },
         "address": {
           "type": "string",
           "default": "localhost:4444"
@@ -48,6 +52,7 @@
         }
       },
       "required": [
+        "enable",
         "address",
         "password",
         "nonRunCommercialTriggerScene",

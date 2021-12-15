@@ -20,12 +20,14 @@ async function connect(): Promise<void> {
   }
 }
 
-nodecg().log.info('[OBS] Setting up connection');
-connect();
-obs.on('ConnectionClosed', () => {
-  nodecg().log.warn('[OBS] Connection lost, retrying in 5 seconds');
-  setTimeout(connect, 5000);
-});
+if (config.enable) {
+  nodecg().log.info('[OBS] Setting up connection');
+  connect();
+  obs.on('ConnectionClosed', () => {
+    nodecg().log.warn('[OBS] Connection lost, retrying in 5 seconds');
+    setTimeout(connect, 5000);
+  });
+}
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore: Pretty sure this emits an error.

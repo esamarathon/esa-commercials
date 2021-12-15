@@ -11,6 +11,7 @@ export interface Configschema {
 	 */
 	thisEvent: number;
 	obs: {
+		enable: boolean;
 		address: string;
 		password: string;
 		/**
