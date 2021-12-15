@@ -14,6 +14,10 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
+        "enable": {
+          "type": "boolean",
+          "default": true
+        },
         "address": {
           "type": "string",
           "default": "localhost:4444"
@@ -36,7 +40,9 @@
               "type": "array",
               "items": {
                 "type": "string"
-              }
+              },
+              "uniqueItems": true,
+              "minItems": 1
             }
           ],
           "default": [
@@ -48,15 +54,59 @@
         }
       },
       "required": [
+        "enable",
         "address",
         "password",
         "nonRunCommercialTriggerScene",
         "nonRunCommercialScenes"
       ]
+    },
+    "server": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enable": {
+          "type": "boolean",
+          "default": false
+        },
+        "address": {
+          "type": "string",
+          "default": "ADDRESS"
+        },
+        "token": {
+          "type": "string",
+          "default": "TOKEN"
+        },
+        "channels": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "uniqueItems": true,
+              "minItems": 1
+            }
+          ],
+          "default": "esamarathon",
+          "description": "Name(s) of the channel(s) commercials shall be ran on."
+        }
+      },
+      "description": "Needed if using our external server to run commercials.",
+      "required": [
+        "enable",
+        "address",
+        "token",
+        "channels"
+      ]
     }
   },
   "required": [
     "thisEvent",
-    "obs"
+    "obs",
+    "server"
   ]
 }

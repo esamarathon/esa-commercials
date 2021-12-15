@@ -1,5 +1,5 @@
 import type { Configschema } from '@esa-commercials/types/schemas';
-import SpeedcontrolUtil from 'speedcontrol-util';
+import { sc } from '@esa-commercials/util/speedcontrol';
 import { get as nodecg } from './util/nodecg';
 import obs from './util/obs';
 import { cycles, disabled, toggle } from './util/replicants';
@@ -8,7 +8,6 @@ const config = (nodecg().bundleConfig as Configschema);
 const nonRunCommercialScenes = Array.isArray(config.obs.nonRunCommercialScenes)
   ? config.obs.nonRunCommercialScenes
   : [config.obs.nonRunCommercialScenes];
-const sc = new SpeedcontrolUtil(nodecg());
 let commercialInterval: NodeJS.Timeout;
 let intermissionCommercialCount = 0;
 let intermissionCommercialTO: NodeJS.Timeout | null = null;

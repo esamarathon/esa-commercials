@@ -11,6 +11,7 @@ export interface Configschema {
 	 */
 	thisEvent: number;
 	obs: {
+		enable: boolean;
 		address: string;
 		password: string;
 		/**
@@ -20,6 +21,18 @@ export interface Configschema {
 		/**
 		 * Name(s) of the scene(s) in OBS you wish to allow non-run based commercials to continue running on.
 		 */
-		nonRunCommercialScenes: string | string[];
+		nonRunCommercialScenes: string | [string, ...string[]];
+	};
+	/**
+	 * Needed if using our external server to run commercials.
+	 */
+	server: {
+		enable: boolean;
+		address: string;
+		token: string;
+		/**
+		 * Name(s) of the channel(s) commercials shall be ran on.
+		 */
+		channels: string | [string, ...string[]];
 	};
 }
