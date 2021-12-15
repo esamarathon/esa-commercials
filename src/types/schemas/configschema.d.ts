@@ -21,7 +21,7 @@ export interface Configschema {
 		/**
 		 * Name(s) of the scene(s) in OBS you wish to allow non-run based commercials to continue running on.
 		 */
-		nonRunCommercialScenes: string | string[];
+		nonRunCommercialScenes: string | [string, ...string[]];
 	};
 	/**
 	 * Needed if using our external server to run commercials.
