@@ -32,12 +32,14 @@ function connect() {
         }
     });
 }
-(0, nodecg_1.get)().log.info('[OBS] Setting up connection');
-connect();
-obs.on('ConnectionClosed', () => {
-    (0, nodecg_1.get)().log.warn('[OBS] Connection lost, retrying in 5 seconds');
-    setTimeout(connect, 5000);
-});
+if (config.enable) {
+    (0, nodecg_1.get)().log.info('[OBS] Setting up connection');
+    connect();
+    obs.on('ConnectionClosed', () => {
+        (0, nodecg_1.get)().log.warn('[OBS] Connection lost, retrying in 5 seconds');
+        setTimeout(connect, 5000);
+    });
+}
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore: Pretty sure this emits an error.
 obs.on('error', (err) => {

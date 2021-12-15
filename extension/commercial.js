@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const speedcontrol_util_1 = __importDefault(require("speedcontrol-util"));
+const speedcontrol_1 = require("@esa-commercials/util/speedcontrol");
 const nodecg_1 = require("./util/nodecg");
 const obs_1 = __importDefault(require("./util/obs"));
 const replicants_1 = require("./util/replicants");
@@ -20,7 +20,6 @@ const config = (0, nodecg_1.get)().bundleConfig;
 const nonRunCommercialScenes = Array.isArray(config.obs.nonRunCommercialScenes)
     ? config.obs.nonRunCommercialScenes
     : [config.obs.nonRunCommercialScenes];
-const sc = new speedcontrol_util_1.default((0, nodecg_1.get)());
 let commercialInterval;
 let intermissionCommercialCount = 0;
 let intermissionCommercialTO = null;
@@ -29,18 +28,18 @@ let intermissionCommercialTO = null;
  */
 function checkForCommercial() {
     return __awaiter(this, void 0, void 0, function* () {
-        const run = sc.getCurrentRun();
+        const run = speedcontrol_1.sc.getCurrentRun();
         // We shouldn't be running at all, but just in case and it's disabled, don't go further.
         if (replicants_1.disabled.value || !replicants_1.cycles.value || !(run === null || run === void 0 ? void 0 : run.estimateS)) {
             return;
         }
-        const timerS = sc.timer.value.milliseconds / 1000;
+        const timerS = speedcontrol_1.sc.timer.value.milliseconds / 1000;
         const nextCycle = replicants_1.cycles.value.frequency * (replicants_1.cycles.value.countIndex + 1);
         if (nextCycle < timerS) {
             replicants_1.cycles.value.countIndex += 1;
             if (replicants_1.toggle.value) {
                 try {
-                    yield sc.sendMessage('twitchStartCommercial', { duration: 180 });
+                    yield speedcontrol_1.sc.sendMessage('twitchStartCommercial', { duration: 180 });
                     (0, nodecg_1.get)().log.info('[Commercial] Triggered successfully');
                 }
                 catch (err) {
@@ -62,9 +61,9 @@ function checkForCommercial() {
         }
     });
 }
-sc.on('timerStarted', () => {
+speedcontrol_1.sc.on('timerStarted', () => {
     clearTimeout(commercialInterval);
-    const run = sc.getCurrentRun();
+    const run = speedcontrol_1.sc.getCurrentRun();
     // Don't run any if no active run is available to check.
     if (!(run === null || run === void 0 ? void 0 : run.estimateS)) {
         return;
@@ -87,12 +86,12 @@ sc.on('timerStarted', () => {
     (0, nodecg_1.get)().log.info(`[Commercial] Will run in ~${Math.round(freq / 60)} minutes`);
     commercialInterval = setInterval(checkForCommercial, 1000);
 });
-sc.on('timerStopped', () => {
+speedcontrol_1.sc.on('timerStopped', () => {
     clearTimeout(commercialInterval);
     replicants_1.cycles.value = null;
     replicants_1.disabled.value = true;
 });
-sc.on('timerReset', () => {
+speedcontrol_1.sc.on('timerReset', () => {
     clearTimeout(commercialInterval);
     replicants_1.cycles.value = null;
     replicants_1.disabled.value = true;
@@ -116,7 +115,7 @@ function playBreakCommercials() {
                 return;
             }
             if (replicants_1.toggle.value) {
-                yield sc.sendMessage('twitchStartCommercial', {
+                yield speedcontrol_1.sc.sendMessage('twitchStartCommercial', {
                     duration: intermissionCommercialCount < 1 ? 300 : 30, // 5 minutes / 30 seconds
                 });
                 (0, nodecg_1.get)().log.info('[Commercial] Triggered due to non-run commercial scenes (count: %s)', intermissionCommercialCount + 1);
@@ -150,8 +149,8 @@ obs_1.default.on('SwitchScenes', (data) => __awaiter(void 0, void 0, void 0, fun
 }));
 // If the timer has been recovered on start up,
 // need to make sure the commercial checking is going to run.
-if (sc.timer.value.state === 'running' && !replicants_1.disabled.value && replicants_1.cycles.value) {
-    const run = sc.getCurrentRun();
+if (speedcontrol_1.sc.timer.value.state === 'running' && !replicants_1.disabled.value && replicants_1.cycles.value) {
+    const run = speedcontrol_1.sc.getCurrentRun();
     if (run && run.id !== replicants_1.cycles.value.runId) {
         replicants_1.cycles.value = null;
         replicants_1.disabled.value = true;
