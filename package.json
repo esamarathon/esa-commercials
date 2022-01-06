@@ -94,6 +94,7 @@
         "title": "ESA Commercial Control",
         "file": "control.html",
         "workspace": "ESA",
+        "headerColor": "#c49215",
         "width": 3
       }
     ]
