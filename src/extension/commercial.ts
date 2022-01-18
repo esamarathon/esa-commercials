@@ -164,10 +164,10 @@ if (sc.timer.value.state === 'running' && !disabled.value && cycles.value) {
   }
 }
 
-// Only used by esa-layouts so we can continue playing commercials once our video player
+// Only used by esa-layouts so we can continue playing commercials once our intermission player
 // ones have finished. Once the video player has finished, will continue the cycle after 3m10s.
 // TODO: change to be smarter
-nodecg().listenFor('videoPlayerFinished', 'esa-layouts', () => {
+nodecg().listenFor('intermissionPlayerFinished', 'esa-layouts', () => {
   if (!intermissionCommercialTO) {
     intermissionCommercialCount += 1;
     intermissionCommercialTO = setTimeout(playBreakCommercials, (3 * 60 * 1000) + (10 * 1000));
