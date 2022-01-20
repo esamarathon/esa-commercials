@@ -88,7 +88,7 @@ function startCommercial(length, manual = false) {
 // eslint-disable-next-line import/prefer-default-export
 function setup() {
     return __awaiter(this, void 0, void 0, function* () {
-        if (!config.server.enable)
+        if (!config.server.enabled)
             return;
         (0, nodecg_1.get)().log.info('[Server] Setting up');
         socket.on('connect', () => {
@@ -103,7 +103,10 @@ function setup() {
             (0, nodecg_1.get)().log.debug('[Server] Socket.IO client disconnected:', reason);
         });
         socket.on('commercialLogged', (val) => {
-            speedcontrol_1.sc.sendMessage('twitchStartCommercialTimer', { duration: val.length });
+            try {
+                speedcontrol_1.sc.sendMessage('twitchStartCommercialTimer', { duration: val.length });
+            }
+            catch (err) { /* ignore */ }
         });
         socket.connect();
         speedcontrol_1.sc.listenFor('twitchExternalCommercial', (data, ack) => __awaiter(this, void 0, void 0, function* () {

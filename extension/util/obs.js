@@ -32,7 +32,7 @@ function connect() {
         }
     });
 }
-if (config.enable) {
+if (config.enabled) {
     (0, nodecg_1.get)().log.info('[OBS] Setting up connection');
     connect();
     obs.on('ConnectionClosed', () => {
