@@ -11,7 +11,7 @@ export interface Configschema {
 	 */
 	thisEvent: number;
 	obs: {
-		enable: boolean;
+		enabled: boolean;
 		address: string;
 		password: string;
 		/**
@@ -27,7 +27,7 @@ export interface Configschema {
 	 * Needed if using our external server to run commercials.
 	 */
 	server: {
-		enable: boolean;
+		enabled: boolean;
 		address: string;
 		token: string;
 		/**

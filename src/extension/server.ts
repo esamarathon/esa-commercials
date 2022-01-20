@@ -98,7 +98,7 @@ async function startCommercial(length: number, manual = false): Promise<NeedleRe
 
 // eslint-disable-next-line import/prefer-default-export
 export async function setup(): Promise<void> {
-  if (!config.server.enable) return;
+  if (!config.server.enabled) return;
   nodecg().log.info('[Server] Setting up');
 
   socket.on('connect', () => {
@@ -121,7 +121,9 @@ export async function setup(): Promise<void> {
     length: number;
     manual: boolean;
   }) => {
-    sc.sendMessage('twitchStartCommercialTimer', { duration: val.length });
+    try {
+      sc.sendMessage('twitchStartCommercialTimer', { duration: val.length });
+    } catch (err) { /* ignore */ }
   });
 
   socket.connect();

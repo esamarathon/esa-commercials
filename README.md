@@ -30,7 +30,7 @@ If not obvious, you must be logged into/authorised with Twitch in the `nodecg-sp
     "password": "",
     "nonRunCommercialTriggerScene": "Intermission (commercials)",
     "nonRunCommercialScenes": [
-      "Video Player",
+      "Intermission Player",
       "Intermission",
       "Intermission (commercials)"
     ]
