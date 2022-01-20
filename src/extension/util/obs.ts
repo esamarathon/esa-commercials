@@ -20,7 +20,7 @@ async function connect(): Promise<void> {
   }
 }
 
-if (config.enable) {
+if (config.enabled) {
   nodecg().log.info('[OBS] Setting up connection');
   connect();
   obs.on('ConnectionClosed', () => {

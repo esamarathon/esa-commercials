@@ -14,7 +14,7 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "enable": {
+        "enabled": {
           "type": "boolean",
           "default": true
         },
@@ -46,7 +46,7 @@
             }
           ],
           "default": [
-            "Video Player",
+            "Intermission Player",
             "Intermission",
             "Intermission (commercials)"
           ],
@@ -54,7 +54,7 @@
         }
       },
       "required": [
-        "enable",
+        "enabled",
         "address",
         "password",
         "nonRunCommercialTriggerScene",
@@ -65,7 +65,7 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "enable": {
+        "enabled": {
           "type": "boolean",
           "default": false
         },
@@ -97,7 +97,7 @@
       },
       "description": "Needed if using our external server to run commercials.",
       "required": [
-        "enable",
+        "enabled",
         "address",
         "token",
         "channels"
