@@ -102,12 +102,12 @@ function setup() {
             (0, nodecg_1.get)().log.info('[Server] Socket.IO client disconnected');
             (0, nodecg_1.get)().log.debug('[Server] Socket.IO client disconnected:', reason);
         });
-        socket.on('commercialLogged', (val) => {
+        socket.on('commercialLogged', (val) => __awaiter(this, void 0, void 0, function* () {
             try {
-                speedcontrol_1.sc.sendMessage('twitchStartCommercialTimer', { duration: val.length });
+                yield speedcontrol_1.sc.sendMessage('twitchStartCommercialTimer', { duration: val.length });
             }
             catch (err) { /* ignore */ }
-        });
+        }));
         socket.connect();
         speedcontrol_1.sc.listenFor('twitchExternalCommercial', (data, ack) => __awaiter(this, void 0, void 0, function* () {
             try {
