@@ -19,15 +19,17 @@ const socket: typeof Socket = io(
   { path: `${pathname || ''}/socket.io`, autoConnect: false },
 );
 
-function needleOpts(includeSocketId = true): NeedleOptions {
+function needleOpts(): NeedleOptions {
   const opts: NeedleOptions = {
     headers: {
       Authorization: `Bearer ${config.server.token}`,
       'Content-Type': 'application/json; charset=utf-8',
     },
   };
-  if (includeSocketId && socket.id && opts.headers) {
+  if (socket.id && opts.headers) {
     opts.headers['Socket-ID'] = socket.id;
+  } else {
+    nodecg().log.warn('[Server] Cannot send Socket-ID in headers (socket.id: %s)', socket.id);
   }
   return opts;
 }
