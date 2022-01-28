@@ -26,15 +26,18 @@ const pathname = address.pathname.endsWith('/')
 const chans = Array.isArray(config.server.channels)
     ? config.server.channels.map((c) => c.toLowerCase()) : [config.server.channels.toLowerCase()];
 const socket = (0, socket_io_client_1.io)(address.origin, { path: `${pathname || ''}/socket.io`, autoConnect: false });
-function needleOpts(includeSocketId = true) {
+function needleOpts() {
     const opts = {
         headers: {
             Authorization: `Bearer ${config.server.token}`,
             'Content-Type': 'application/json; charset=utf-8',
         },
     };
-    if (includeSocketId && socket.id && opts.headers) {
+    if (socket.id && opts.headers) {
         opts.headers['Socket-ID'] = socket.id;
+    }
+    else {
+        (0, nodecg_1.get)().log.warn('[Server] Cannot send Socket-ID in headers (socket.id: %s)', socket.id);
     }
     return opts;
 }
