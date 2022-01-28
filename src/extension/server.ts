@@ -113,7 +113,7 @@ export async function setup(): Promise<void> {
     nodecg().log.debug('[Server] Socket.IO client disconnected:', reason);
   });
 
-  socket.on('commercialLogged', (val: {
+  socket.on('commercialLogged', async (val: {
     id: number;
     channelIds: string[];
     eventId: number | null;
@@ -122,7 +122,7 @@ export async function setup(): Promise<void> {
     manual: boolean;
   }) => {
     try {
-      sc.sendMessage('twitchStartCommercialTimer', { duration: val.length });
+      await sc.sendMessage('twitchStartCommercialTimer', { duration: val.length });
     } catch (err) { /* ignore */ }
   });
 
