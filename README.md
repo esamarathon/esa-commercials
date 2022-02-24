@@ -64,4 +64,4 @@ If not obvious, you must be logged into/authorised with Twitch in the `nodecg-sp
 
 Commercials will automatically be triggered when needed, including when switched to the non-run commercial trigger scene in OBS, by default the scene must start with "Intermission (commercials)" but this can be changed in the configuration file (see above).
 
-There is also a dashboard button to disable running commercials for the rest of a run, useful if the run is planned to go highly under estimate.
+There is also a dashboard button to disable running commercials for the rest of a run, useful if the run is planned to go highly under estimate, and a dashboard toggle to disable the actual commercial "running" logic; all other logic will still actually happen, but no commercials will be triggered, useful for testing.
