@@ -25,7 +25,7 @@ If not obvious, you must be logged into/authorised with Twitch in the `nodecg-sp
 {
   "thisEvent": 1,
   "obs": {
-    "enable": true,
+    "enabled": true,
     "address": "localhost:4444",
     "password": "",
     "nonRunCommercialTriggerScene": "Intermission (commercials)",
@@ -36,7 +36,7 @@ If not obvious, you must be logged into/authorised with Twitch in the `nodecg-sp
     ]
   },
   "server": {
-    "enable": false,
+    "enabled": false,
     "address": "ADDRESS",
     "token": "TOKEN",
     "channels": [
@@ -48,13 +48,13 @@ If not obvious, you must be logged into/authorised with Twitch in the `nodecg-sp
 
 - `thisEvent`: Only change this number if you are asked to; changes internal logic.
 - `obs`: Settings related to the OBS WebSocket connection.
-  - `enable`: If the OBS required functionality should be enabled or not. Usually you want this enabled unless told otherwise.
+  - `enabled`: If the OBS required functionality should be enabled or not. Usually you want this enabled unless told otherwise.
   - `address`: Address of OBS WebSocket instance, in the pattern `hostname:port`. Does not need changing if using defaults and running locally.
   - `password`: Password used for securing the OBS WebSocket instance, if you have set this.
   - `nonRunCommercialTriggerScene`: Name of the scene which will start the internal logic for "non-run" commercials; this is case sensitive and matches the start of the string, so more characters can be added after in your scene name in OBS if needed.
   - `nonRunCommercialScenes`: Names of the scenes which count as part of your "non-run" scenes, intermission scenes usually; these are scenes that commercials will play on when a run is currently not happening. Similar to above, these are case sensitive and match the start of the string. **Make sure you add every possible scene that may be used during non-run time!**
 - `server`: Settings related to using our external server to run commercials. Should only be used if you are requested to. We will supply all the information if needed. **This requires you to set the `twitch.commercialsUseExternal` setting to `true` in the `nodecg-speedcontrol` bundle configuration; [see the README](https://github.com/speedcontrol/nodecg-speedcontrol/blob/master/READMES/Configuration.md#twitch).**
-  - `enable`: If this functionality should be enabled.
+  - `enabled`: If this functionality should be enabled.
   - `address`: Address of the server.
   - `token` Authorisation token used for the server, it must have these scopes: `authorised-channels:channels:read`, `commercials:logs:read`, `commercials:start`.
   - `channels`: Array of channel names for commercials to be ran on.
