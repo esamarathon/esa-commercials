@@ -2,6 +2,7 @@ import { Configschema } from '@esa-commercials/types/schemas';
 import { get as nodecg } from '@esa-commercials/util/nodecg';
 import needle, { NeedleOptions, NeedleResponse } from 'needle';
 import { io, Socket } from 'socket.io-client';
+import { twitchChannelInfo } from './util/replicants';
 import { sc } from './util/speedcontrol';
 
 const config = (nodecg().bundleConfig as Configschema);
@@ -98,6 +99,44 @@ async function startCommercial(length: number, manual = false): Promise<NeedleRe
   }
 }
 
+async function changeTwitchMetadata(title?: string, gameId?: string): Promise<void> {
+  try {
+    let t = title || (twitchChannelInfo.value.title as string | undefined);
+    const gID = gameId || (twitchChannelInfo.value.game_id as string | undefined);
+    nodecg().log.debug('[Server] Decided Twitch title is: %s - Decided game ID is %s', t, gID);
+    const serverChans = await getAuthorisedChannels();
+    const validChans = serverChans.filter((c) => chans.includes(c.name.toLowerCase()));
+    if (!validChans.length) throw new Error('client error; no channels to change metadata of');
+    const data: {
+      channelIds: string[];
+      title: string;
+      dir: string;
+    } = {
+      channelIds: validChans.map((c) => c.id),
+      title: t?.slice(0, 140) || '',
+      dir: gID || '',
+    };
+    const resp = await needle(
+      'post',
+      `${address.origin}${pathname}/twitch_metadata/change`,
+      JSON.stringify(data),
+      needleOpts(),
+    );
+    if (resp.statusCode !== 200) {
+      throw new Error(`status code ${resp.statusCode}: ${JSON.stringify(resp.body)}`);
+    }
+    // Update the data with what we've got.
+    twitchChannelInfo.value.title = t?.slice(0, 140) || '';
+    twitchChannelInfo.value.game_id = gID || '';
+    // twitchChannelInfo.value.game_name = dir?.name || '';
+    nodecg().log.debug('[Server] Twitch title/game updated');
+  } catch (err) {
+    nodecg().log.warn('[Server] Error updating Twitch channel information');
+    nodecg().log.debug('[Server] Error updating Twitch channel information:', err);
+  }
+}
+
+
 // eslint-disable-next-line import/prefer-default-export
 export async function setup(): Promise<void> {
   if (!config.server.enabled) return;
@@ -150,5 +189,19 @@ export async function setup(): Promise<void> {
     } catch (err) {
       if (!ack.handled) ack(err as Error);
     }
+  });
+
+  // Used to change the Twitch title/category when requested by nodecg-speedcontrol.
+  nodecg().listenFor('twitchExternalMetadata', 'nodecg-speedcontrol', async ({ title, gameID }: {
+    channelID?: string,
+    title?: string,
+    gameID: string,
+  }) => {
+    nodecg().log.debug(
+      '[Server] Message received to change title/game, will attempt (title: %s, game id: %s)',
+      title,
+      gameID,
+    );
+    await changeTwitchMetadata(title, gameID);
   });
 }
