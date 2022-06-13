@@ -1,6 +1,7 @@
 /* eslint-disable max-len */
 
 import { Cycles, Disabled, Toggle } from '@esa-commercials/types/schemas';
+import { TwitchChannelInfo } from 'speedcontrol-util/types/speedcontrol/schemas';
 import { get as nodecg } from './nodecg';
 
 /**
@@ -11,3 +12,4 @@ import { get as nodecg } from './nodecg';
 export const cycles = nodecg().Replicant<Cycles>('cycles');
 export const disabled = nodecg().Replicant<Disabled>('disabled');
 export const toggle = nodecg().Replicant<Toggle>('toggle');
+export const twitchChannelInfo = nodecg().Replicant<TwitchChannelInfo>('twitchChannelInfo', 'nodecg-speedcontrol');
