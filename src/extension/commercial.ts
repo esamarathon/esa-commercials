@@ -1,7 +1,7 @@
 import type { Configschema } from '@esa-commercials/types/schemas';
 import { sc } from '@esa-commercials/util/speedcontrol';
 import { get as nodecg } from './util/nodecg';
-import obs from './util/obs';
+import obs, { obsStreaming } from './util/obs';
 import { cycles, disabled, toggle } from './util/replicants';
 
 const config = (nodecg().bundleConfig as Configschema);
@@ -105,7 +105,7 @@ async function playBreakCommercials(): Promise<void> {
       }
       return;
     }
-    if (toggle.value) {
+    if (toggle.value && obsStreaming) {
       await sc.sendMessage('twitchStartCommercial', {
         duration: intermissionCommercialCount < 1 ? 300 : 30, // 5 minutes / 30 seconds
       });
