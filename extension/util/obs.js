@@ -12,10 +12,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.obsStreaming = void 0;
 const obs_websocket_js_1 = __importDefault(require("obs-websocket-js"));
 const nodecg_1 = require("./nodecg");
 const config = (0, nodecg_1.get)().bundleConfig.obs;
 const obs = new obs_websocket_js_1.default();
+exports.obsStreaming = false;
 const settings = {
     address: config.address,
     password: config.password,
@@ -24,6 +26,8 @@ function connect() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             yield obs.connect(settings);
+            const streamingStatus = yield obs.send('GetStreamingStatus');
+            exports.obsStreaming = streamingStatus.streaming;
             (0, nodecg_1.get)().log.info('[OBS] Connection successful');
         }
         catch (err) {
@@ -35,6 +39,8 @@ function connect() {
 if (config.enabled) {
     (0, nodecg_1.get)().log.info('[OBS] Setting up connection');
     connect();
+    obs.on('StreamStarted', () => { exports.obsStreaming = true; });
+    obs.on('StreamStopped', () => { exports.obsStreaming = false; });
     obs.on('ConnectionClosed', () => {
         (0, nodecg_1.get)().log.warn('[OBS] Connection lost, retrying in 5 seconds');
         setTimeout(connect, 5000);
