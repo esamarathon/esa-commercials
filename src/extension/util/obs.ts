@@ -5,6 +5,7 @@ import { get as nodecg } from './nodecg';
 const config = (nodecg().bundleConfig as Configschema).obs;
 
 const obs = new OBSWebSocketJS();
+export let obsStreaming = false;
 const settings = {
   address: config.address,
   password: config.password,
@@ -13,6 +14,8 @@ const settings = {
 async function connect(): Promise<void> {
   try {
     await obs.connect(settings);
+    const streamingStatus = await obs.send('GetStreamingStatus');
+    obsStreaming = streamingStatus.streaming;
     nodecg().log.info('[OBS] Connection successful');
   } catch (err) {
     nodecg().log.warn('[OBS] Connection error');
@@ -23,6 +26,8 @@ async function connect(): Promise<void> {
 if (config.enabled) {
   nodecg().log.info('[OBS] Setting up connection');
   connect();
+  obs.on('StreamStarted', () => { obsStreaming = true; });
+  obs.on('StreamStopped', () => { obsStreaming = false; });
   obs.on('ConnectionClosed', () => {
     nodecg().log.warn('[OBS] Connection lost, retrying in 5 seconds');
     setTimeout(connect, 5000);
