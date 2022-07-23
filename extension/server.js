@@ -92,7 +92,7 @@ function startCommercial(length, manual = false) {
 function changeTwitchMetadata(title, gameId) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            let t = title || replicants_1.twitchChannelInfo.value.title;
+            const t = title || replicants_1.twitchChannelInfo.value.title;
             const gID = gameId || replicants_1.twitchChannelInfo.value.game_id;
             (0, nodecg_1.get)().log.debug('[Server] Decided Twitch title is: %s - Decided game ID is %s', t, gID);
             const serverChans = yield getAuthorisedChannels();
@@ -161,11 +161,13 @@ function setup() {
                     ack(err);
             }
         }));
-        // Used to change the Twitch title/category when requested by nodecg-speedcontrol.
-        (0, nodecg_1.get)().listenFor('twitchExternalMetadata', 'nodecg-speedcontrol', ({ title, gameID }) => __awaiter(this, void 0, void 0, function* () {
-            (0, nodecg_1.get)().log.debug('[Server] Message received to change title/game, will attempt (title: %s, game id: %s)', title, gameID);
-            yield changeTwitchMetadata(title, gameID);
-        }));
+        if (config.server.updateMetadata) {
+            // Used to change the Twitch title/category when requested by nodecg-speedcontrol.
+            (0, nodecg_1.get)().listenFor('twitchExternalMetadata', 'nodecg-speedcontrol', ({ title, gameID }) => __awaiter(this, void 0, void 0, function* () {
+                (0, nodecg_1.get)().log.debug('[Server] Message received to change title/game, will attempt (title: %s, game id: %s)', title, gameID);
+                yield changeTwitchMetadata(title, gameID);
+            }));
+        }
     });
 }
 exports.setup = setup;
