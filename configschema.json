@@ -93,6 +93,10 @@
           ],
           "default": "esamarathon",
           "description": "Name(s) of the channel(s) commercials shall be ran on."
+        },
+        "updateMetadata": {
+          "type": "boolean",
+          "default": false
         }
       },
       "description": "Needed if using our external server to run commercials.",
@@ -100,7 +104,8 @@
         "enabled",
         "address",
         "token",
-        "channels"
+        "channels",
+        "updateMetadata"
       ]
     }
   },

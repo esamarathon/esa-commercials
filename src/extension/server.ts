@@ -101,7 +101,7 @@ async function startCommercial(length: number, manual = false): Promise<NeedleRe
 
 async function changeTwitchMetadata(title?: string, gameId?: string): Promise<void> {
   try {
-    let t = title || (twitchChannelInfo.value.title as string | undefined);
+    const t = title || (twitchChannelInfo.value.title as string | undefined);
     const gID = gameId || (twitchChannelInfo.value.game_id as string | undefined);
     nodecg().log.debug('[Server] Decided Twitch title is: %s - Decided game ID is %s', t, gID);
     const serverChans = await getAuthorisedChannels();
@@ -135,7 +135,6 @@ async function changeTwitchMetadata(title?: string, gameId?: string): Promise<vo
     nodecg().log.debug('[Server] Error updating Twitch channel information:', err);
   }
 }
-
 
 // eslint-disable-next-line import/prefer-default-export
 export async function setup(): Promise<void> {
@@ -191,17 +190,19 @@ export async function setup(): Promise<void> {
     }
   });
 
-  // Used to change the Twitch title/category when requested by nodecg-speedcontrol.
-  nodecg().listenFor('twitchExternalMetadata', 'nodecg-speedcontrol', async ({ title, gameID }: {
-    channelID?: string,
-    title?: string,
-    gameID: string,
-  }) => {
-    nodecg().log.debug(
-      '[Server] Message received to change title/game, will attempt (title: %s, game id: %s)',
-      title,
-      gameID,
-    );
-    await changeTwitchMetadata(title, gameID);
-  });
+  if (config.server.updateMetadata) {
+    // Used to change the Twitch title/category when requested by nodecg-speedcontrol.
+    nodecg().listenFor('twitchExternalMetadata', 'nodecg-speedcontrol', async ({ title, gameID }: {
+      channelID?: string,
+      title?: string,
+      gameID: string,
+    }) => {
+      nodecg().log.debug(
+        '[Server] Message received to change title/game, will attempt (title: %s, game id: %s)',
+        title,
+        gameID,
+      );
+      await changeTwitchMetadata(title, gameID);
+    });
+  }
 }
