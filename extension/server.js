@@ -139,7 +139,12 @@ function setup() {
         });
         socket.on('commercialLogged', (val) => __awaiter(this, void 0, void 0, function* () {
             try {
-                yield speedcontrol_1.sc.sendMessage('twitchStartCommercialTimer', { duration: val.length });
+                // Check against ID if this commercial is applicable to this channel or not.
+                const serverChanIds = (yield getAuthorisedChannels())
+                    .filter((c) => chans.includes(c.name.toLowerCase())).map((c) => c.id);
+                if (val.channelIds.filter((c) => serverChanIds.includes(c)).length) {
+                    yield speedcontrol_1.sc.sendMessage('twitchStartCommercialTimer', { duration: val.length });
+                }
             }
             catch (err) { /* ignore */ }
         }));
