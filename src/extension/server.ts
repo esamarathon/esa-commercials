@@ -162,7 +162,12 @@ export async function setup(): Promise<void> {
     manual: boolean;
   }) => {
     try {
-      await sc.sendMessage('twitchStartCommercialTimer', { duration: val.length });
+      // Check against ID if this commercial is applicable to this channel or not.
+      const serverChanIds = (await getAuthorisedChannels())
+        .filter((c) => chans.includes(c.name.toLowerCase())).map((c) => c.id);
+      if (val.channelIds.filter((c) => serverChanIds.includes(c)).length) {
+        await sc.sendMessage('twitchStartCommercialTimer', { duration: val.length });
+      }
     } catch (err) { /* ignore */ }
   });
 
