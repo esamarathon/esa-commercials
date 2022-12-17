@@ -167,11 +167,20 @@ function setup() {
             }
         }));
         if (config.server.updateMetadata) {
-            // Used to change the Twitch title/category when requested by nodecg-speedcontrol.
-            (0, nodecg_1.get)().listenFor('twitchExternalMetadata', 'nodecg-speedcontrol', ({ title, gameID }) => __awaiter(this, void 0, void 0, function* () {
-                (0, nodecg_1.get)().log.debug('[Server] Message received to change title/game, will attempt (title: %s, game id: %s)', title, gameID);
-                yield changeTwitchMetadata(title, gameID);
-            }));
+            if (config.server.updateMetadataAltMode) {
+                // Used to change the Twitch title/category when requested by any bundle targetting us.
+                (0, nodecg_1.get)().listenFor('twitchExternalMetadataAltMode', ({ title, gameID }) => __awaiter(this, void 0, void 0, function* () {
+                    (0, nodecg_1.get)().log.debug('[Server] Message received to change title/game, will attempt (title: %s, game id: %s)', title, gameID);
+                    yield changeTwitchMetadata(title, gameID);
+                }));
+            }
+            else {
+                // Used to change the Twitch title/category when requested by nodecg-speedcontrol.
+                (0, nodecg_1.get)().listenFor('twitchExternalMetadata', 'nodecg-speedcontrol', ({ title, gameID }) => __awaiter(this, void 0, void 0, function* () {
+                    (0, nodecg_1.get)().log.debug('[Server] Message received to change title/game, will attempt (title: %s, game id: %s)', title, gameID);
+                    yield changeTwitchMetadata(title, gameID);
+                }));
+            }
         }
     });
 }
