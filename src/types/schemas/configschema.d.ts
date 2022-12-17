@@ -35,5 +35,6 @@ export interface Configschema {
 		 */
 		channels: string | [string, ...string[]];
 		updateMetadata: boolean;
+		updateMetadataAltMode: boolean;
 	};
 }

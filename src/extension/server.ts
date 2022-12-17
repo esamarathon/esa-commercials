@@ -196,18 +196,41 @@ export async function setup(): Promise<void> {
   });
 
   if (config.server.updateMetadata) {
-    // Used to change the Twitch title/category when requested by nodecg-speedcontrol.
-    nodecg().listenFor('twitchExternalMetadata', 'nodecg-speedcontrol', async ({ title, gameID }: {
-      channelID?: string,
-      title?: string,
-      gameID: string,
-    }) => {
-      nodecg().log.debug(
-        '[Server] Message received to change title/game, will attempt (title: %s, game id: %s)',
-        title,
-        gameID,
+    if (config.server.updateMetadataAltMode) {
+      // Used to change the Twitch title/category when requested by any bundle targetting us.
+      nodecg().listenFor(
+        'twitchExternalMetadataAltMode',
+        async ({ title, gameID }: {
+          channelID?: string,
+          title?: string,
+          gameID: string,
+        }) => {
+          nodecg().log.debug(
+            '[Server] Message received to change title/game, will attempt (title: %s, game id: %s)',
+            title,
+            gameID,
+          );
+          await changeTwitchMetadata(title, gameID);
+        },
       );
-      await changeTwitchMetadata(title, gameID);
-    });
+    } else {
+      // Used to change the Twitch title/category when requested by nodecg-speedcontrol.
+      nodecg().listenFor(
+        'twitchExternalMetadata',
+        'nodecg-speedcontrol',
+        async ({ title, gameID }: {
+          channelID?: string,
+          title?: string,
+          gameID: string,
+        }) => {
+          nodecg().log.debug(
+            '[Server] Message received to change title/game, will attempt (title: %s, game id: %s)',
+            title,
+            gameID,
+          );
+          await changeTwitchMetadata(title, gameID);
+        },
+      );
+    }
   }
 }

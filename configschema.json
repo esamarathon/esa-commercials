@@ -97,6 +97,10 @@
         "updateMetadata": {
           "type": "boolean",
           "default": false
+        },
+        "updateMetadataAltMode": {
+          "type": "boolean",
+          "default": false
         }
       },
       "description": "Needed if using our external server to run commercials.",
@@ -105,7 +109,8 @@
         "address",
         "token",
         "channels",
-        "updateMetadata"
+        "updateMetadata",
+        "updateMetadataAltMode"
       ]
     }
   },
