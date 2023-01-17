@@ -5,10 +5,11 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 require('module-alias').addAlias('@esa-commercials', require('path').join(__dirname, '.'));
 
-import type { NodeCG } from 'nodecg/types/server';
+import type NodeCGTypes from '@alvancamp/test-nodecg-types';
+import type { Configschema } from '@esa-commercials/types/schemas';
 import { set } from './util/nodecg';
 
-export = async (nodecg: NodeCG): Promise<void> => {
+export = async (nodecg: NodeCGTypes.ServerAPI<Configschema>): Promise<void> => {
   /**
    * Because of how `import`s work, it helps to use `require`s to force
    * things to be loaded *after* the NodeCG context is set.

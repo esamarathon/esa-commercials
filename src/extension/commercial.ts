@@ -1,10 +1,9 @@
-import type { Configschema } from '@esa-commercials/types/schemas';
 import { sc } from '@esa-commercials/util/speedcontrol';
 import { get as nodecg } from './util/nodecg';
-import obs, { obsStreaming } from './util/obs';
+import obs, { isStreaming } from './util/obs';
 import { cycles, disabled, toggle } from './util/replicants';
 
-const config = (nodecg().bundleConfig as Configschema);
+const config = nodecg().bundleConfig;
 const nonRunCommercialScenes = Array.isArray(config.obs.nonRunCommercialScenes)
   ? config.obs.nonRunCommercialScenes
   : [config.obs.nonRunCommercialScenes];
@@ -105,7 +104,7 @@ async function playBreakCommercials(): Promise<void> {
       }
       return;
     }
-    if (toggle.value && obsStreaming) {
+    if (toggle.value && isStreaming()) {
       await sc.sendMessage('twitchStartCommercial', {
         duration: intermissionCommercialCount < 1 ? 300 : 30, // 5 minutes / 30 seconds
       });

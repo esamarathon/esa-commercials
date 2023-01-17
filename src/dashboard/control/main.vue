@@ -33,13 +33,13 @@
 <script lang="ts">
 import { replicantModule, ReplicantTypes } from '@esa-commercials/browser_shared/replicant_store';
 import { Cycles, Disabled, Toggle } from '@esa-commercials/types/schemas';
-import { Vue, Component } from 'vue-property-decorator';
-import { Getter } from 'vuex-class';
+import clone from 'clone';
 import { SpeedcontrolUtilBrowser } from 'speedcontrol-util';
 import { Timer } from 'speedcontrol-util/types';
-import clone from 'clone';
+import { Component, Vue } from 'vue-property-decorator';
+import { Getter } from 'vuex-class';
 
-const sc = new SpeedcontrolUtilBrowser(nodecg);
+const sc = new SpeedcontrolUtilBrowser(nodecg as any); // This needs fixing in speedcontrol-util!
 
 @Component
 export default class extends Vue {

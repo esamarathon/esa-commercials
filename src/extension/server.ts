@@ -1,11 +1,10 @@
-import { Configschema } from '@esa-commercials/types/schemas';
 import { get as nodecg } from '@esa-commercials/util/nodecg';
 import needle, { NeedleOptions, NeedleResponse } from 'needle';
 import { io, Socket } from 'socket.io-client';
 import { twitchChannelInfo } from './util/replicants';
 import { sc } from './util/speedcontrol';
 
-const config = (nodecg().bundleConfig as Configschema);
+const config = nodecg().bundleConfig;
 const address = new URL(
   config.server.address !== 'ADDRESS'
     ? config.server.address
