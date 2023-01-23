@@ -1,12 +1,15 @@
+import { Configschema } from '@esa-commercials/types/schemas';
 import { sc } from '@esa-commercials/util/speedcontrol';
+import type { DeepWritable } from 'ts-essentials';
 import { get as nodecg } from './util/nodecg';
 import obs, { isStreaming } from './util/obs';
 import { cycles, disabled, toggle } from './util/replicants';
 
 const config = nodecg().bundleConfig;
-const nonRunCommercialScenes = Array.isArray(config.obs.nonRunCommercialScenes)
-  ? config.obs.nonRunCommercialScenes
-  : [config.obs.nonRunCommercialScenes];
+const nonRunCommercialScenes = (() => {
+  const cfg = (config as DeepWritable<Configschema>).obs.nonRunCommercialScenes;
+  return Array.isArray(cfg) ? cfg : [cfg];
+})();
 let commercialInterval: NodeJS.Timeout;
 let intermissionCommercialCount = 0;
 let intermissionCommercialTO: NodeJS.Timeout | null = null;

@@ -1,6 +1,8 @@
+import { Configschema } from '@esa-commercials/types/schemas';
 import { get as nodecg } from '@esa-commercials/util/nodecg';
 import needle, { NeedleOptions, NeedleResponse } from 'needle';
 import { io, Socket } from 'socket.io-client';
+import type { DeepWritable } from 'ts-essentials';
 import { twitchChannelInfo } from './util/replicants';
 import { sc } from './util/speedcontrol';
 
@@ -12,8 +14,10 @@ const address = new URL(
 );
 const pathname = address.pathname.endsWith('/')
   ? address.pathname.slice(0, -1) : address.pathname;
-const chans = Array.isArray(config.server.channels)
-  ? config.server.channels.map((c) => c.toLowerCase()) : [config.server.channels.toLowerCase()];
+const chans = (() => {
+  const cfg = (config as DeepWritable<Configschema>).server.channels;
+  return Array.isArray(cfg) ? cfg.map((c) => c.toLowerCase()) : [cfg.toLowerCase()];
+})();
 const socket: typeof Socket = io(
   address.origin,
   { path: `${pathname || ''}/socket.io`, autoConnect: false },
