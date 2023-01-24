@@ -31,7 +31,7 @@
     "needle": "^3.2.0",
     "obs-websocket-js": "^4.0.3",
     "socket.io-client": "^4.5.4",
-    "speedcontrol-util": "git+https://git@github.com/speedcontrol/speedcontrol-util.git#build"
+    "speedcontrol-util": "github:speedcontrol/speedcontrol-util.git#build"
   },
   "devDependencies": {
     "@alvancamp/test-nodecg-types": "^1.9.30",
