@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 
 import { Cycles, Disabled, Toggle } from '@esa-commercials/types/schemas';
-import { TwitchChannelInfo } from 'speedcontrol-util/types/speedcontrol/schemas';
+import { TwitchChannelInfo } from 'speedcontrol-util/types/schemas';
 import { get as nodecg } from './nodecg';
 
 /**

@@ -39,7 +39,7 @@ import { Timer } from 'speedcontrol-util/types';
 import { Component, Vue } from 'vue-property-decorator';
 import { Getter } from 'vuex-class';
 
-const sc = new SpeedcontrolUtilBrowser(nodecg as any); // This needs fixing in speedcontrol-util!
+const sc = new SpeedcontrolUtilBrowser(nodecg);
 
 @Component
 export default class extends Vue {
