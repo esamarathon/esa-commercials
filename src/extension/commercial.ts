@@ -30,7 +30,7 @@ async function checkForCommercial(): Promise<void> {
     cycles.value.countIndex += 1;
     if (toggle.value) {
       try {
-        await sc.sendMessage('twitchStartCommercial', { duration: 180 });
+        await sc.sendMessage('twitchStartCommercial', { duration: 300 });
         nodecg().log.info('[Commercial] Triggered successfully');
       } catch (err) {
         nodecg().log.warn('[Commercial] Could not successfully be triggered');
