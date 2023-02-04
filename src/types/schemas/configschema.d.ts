@@ -7,6 +7,18 @@
 
 export interface Configschema {
 	/**
+	 * Minimum estimate a run must have (in seconds) for commercial automation to take effect.
+	 */
+	minEstimate: number;
+	/**
+	 * Length of commercials ran (in seconds).
+	 */
+	commercialLength: number;
+	/**
+	 * Minimum amount of commercials that must be ran each hour (in seconds).
+	 */
+	targetDensity: number;
+	/**
 	 * This toggles if on the 1st/2nd stream if applicable for your event.
 	 */
 	thisEvent: number;

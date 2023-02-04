@@ -6,6 +6,7 @@ import obs, { isStreaming } from './util/obs';
 import { cycles, disabled, toggle } from './util/replicants';
 
 const config = nodecg().bundleConfig;
+const { minEstimate, commercialLength, targetDensity } = config;
 const nonRunCommercialScenes = (() => {
   const cfg = (config as DeepWritable<Configschema>).obs.nonRunCommercialScenes;
   return Array.isArray(cfg) ? cfg : [cfg];
@@ -30,7 +31,7 @@ async function checkForCommercial(): Promise<void> {
     cycles.value.countIndex += 1;
     if (toggle.value) {
       try {
-        await sc.sendMessage('twitchStartCommercial', { duration: 300 });
+        await sc.sendMessage('twitchStartCommercial', { duration: commercialLength });
         nodecg().log.info('[Commercial] Triggered successfully');
       } catch (err) {
         nodecg().log.warn('[Commercial] Could not successfully be triggered');
@@ -58,13 +59,13 @@ sc.on('timerStarted', () => {
   if (!run?.estimateS) {
     return;
   }
-  // Don't run any if the run is under 2 hours.
-  if (run.estimateS < (2 * 60 * 60)) {
-    nodecg().log.info('[Commercial] Will not run any as run is under 2 hours in length');
+  // Don't run any if the run is under minimum estimate setting.
+  if (run.estimateS < minEstimate) {
+    nodecg().log.info('[Commercial] Will not run any as run is under minimum estimate');
     return;
   }
   // Calculate frequency and count, and store this information.
-  const count = Math.round(run.estimateS / (1 * 60 * 60)) - 1;
+  const count = Math.floor(((targetDensity * (run.estimateS / 60) - 1) / minEstimate));
   const freq = Math.round(run.estimateS / (count + 1));
   cycles.value = {
     runId: run.id,

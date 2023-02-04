@@ -3,6 +3,21 @@
   "type": "object",
   "additionalProperties": false,
   "properties": {
+    "minEstimate": {
+      "type": "number",
+      "description": "Minimum estimate a run must have (in seconds) for commercial automation to take effect.",
+      "default": 3600
+    },
+    "commercialLength": {
+      "type": "number",
+      "description": "Length of commercials ran (in seconds).",
+      "default": 120
+    },
+    "targetDensity": {
+      "type": "number",
+      "description": "Minimum amount of commercials that must be ran each hour (in seconds).",
+      "default": 210
+    },
     "thisEvent": {
       "type": "number",
       "description": "This toggles if on the 1st/2nd stream if applicable for your event.",
@@ -115,6 +130,9 @@
     }
   },
   "required": [
+    "minEstimate",
+    "commercialLength",
+    "targetDensity",
     "thisEvent",
     "obs",
     "server"
