@@ -19,6 +19,10 @@ export interface Configschema {
 	 */
 	targetDensity: number;
 	/**
+	 * Amount of time (in seconds) before the end of a run in which commercials cannot play; mostly used as a backup.
+	 */
+	endBuffer: number;
+	/**
 	 * This toggles if on the 1st/2nd stream if applicable for your event.
 	 */
 	thisEvent: number;

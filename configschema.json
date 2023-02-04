@@ -18,6 +18,11 @@
       "description": "Minimum amount of commercials that must be ran each hour (in seconds).",
       "default": 210
     },
+    "endBuffer": {
+      "type": "number",
+      "description": "Amount of time (in seconds) before the end of a run in which commercials cannot play; mostly used as a backup.",
+      "default": 1200
+    },
     "thisEvent": {
       "type": "number",
       "description": "This toggles if on the 1st/2nd stream if applicable for your event.",
@@ -133,6 +138,7 @@
     "minEstimate",
     "commercialLength",
     "targetDensity",
+    "endBuffer",
     "thisEvent",
     "obs",
     "server"

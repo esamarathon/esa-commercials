@@ -6,7 +6,7 @@ import obs, { isStreaming } from './util/obs';
 import { cycles, disabled, toggle } from './util/replicants';
 
 const config = nodecg().bundleConfig;
-const { minEstimate, commercialLength, targetDensity } = config;
+const { minEstimate, commercialLength, targetDensity, endBuffer } = config;
 const nonRunCommercialScenes = (() => {
   const cfg = (config as DeepWritable<Configschema>).obs.nonRunCommercialScenes;
   return Array.isArray(cfg) ? cfg : [cfg];
@@ -26,27 +26,39 @@ async function checkForCommercial(): Promise<void> {
     return;
   }
   const timerS = sc.timer.value.milliseconds / 1000;
-  const nextCycle = cycles.value.frequency * (cycles.value.countIndex + 1);
-  if (nextCycle < timerS) {
-    cycles.value.countIndex += 1;
-    if (toggle.value) {
-      try {
-        await sc.sendMessage('twitchStartCommercial', { duration: commercialLength });
-        nodecg().log.info('[Commercial] Triggered successfully');
-      } catch (err) {
-        nodecg().log.warn('[Commercial] Could not successfully be triggered');
-        nodecg().log.debug('[Commercial] Could not successfully be triggered:', err);
+  const timeLeft = run.estimateS - timerS;
+  // We have a safety buffer at the end, which shouldn't be needed in most cases but
+  // is there for safety, so we know for sure a commercial cannot happen in the last
+  // X seconds of a run.
+  if (timeLeft < endBuffer) {
+    nodecg().log.info('[Commercial] End buffer hit, '
+      + 'no more will be run for the remainder of the run');
+    clearTimeout(commercialInterval);
+    cycles.value = null;
+    disabled.value = true;
+  } else {
+    const nextCycle = cycles.value.frequency * (cycles.value.countIndex + 1);
+    if (nextCycle < timerS) {
+      cycles.value.countIndex += 1;
+      if (toggle.value) {
+        try {
+          await sc.sendMessage('twitchStartCommercial', { duration: commercialLength });
+          nodecg().log.info('[Commercial] Triggered successfully');
+        } catch (err) {
+          nodecg().log.warn('[Commercial] Could not successfully be triggered');
+          nodecg().log.debug('[Commercial] Could not successfully be triggered:', err);
+        }
       }
-    }
-    if (cycles.value.countIndex < cycles.value.countTotal) {
-      nodecg().log.info('[Commercial] Will run again in '
-      + `~${Math.round(cycles.value.frequency / 60)} minutes`);
-    } else {
-      nodecg().log.info('[Commercial] Cycles complete, '
-        + 'no more will be run for the remainder of the run');
-      clearTimeout(commercialInterval);
-      cycles.value = null;
-      disabled.value = true;
+      if (cycles.value.countIndex < cycles.value.countTotal) {
+        nodecg().log.info('[Commercial] Will run again in '
+        + `~${Math.round(cycles.value.frequency / 60)} minutes`);
+      } else {
+        nodecg().log.info('[Commercial] Cycles complete, '
+          + 'no more will be run for the remainder of the run');
+        clearTimeout(commercialInterval);
+        cycles.value = null;
+        disabled.value = true;
+      }
     }
   }
 }
