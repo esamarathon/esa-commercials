@@ -26,6 +26,16 @@ export interface Configschema {
 	 * This toggles if on the 1st/2nd stream if applicable for your event.
 	 */
 	thisEvent: number;
+	intermissionCommercials: {
+		lengthFirst: number;
+		lengthOther: number;
+		waitFirst: number;
+		waitOther: number;
+		/**
+		 * This is a special toggle to change the intermission commercial logic; only needs to be used if instructed.
+		 */
+		specialLogic: boolean;
+	};
 	obs: {
 		enabled: boolean;
 		address: string;

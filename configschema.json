@@ -30,6 +30,40 @@
       "maximum": 2,
       "default": 1
     },
+    "intermissionCommercials": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "lengthFirst": {
+          "type": "number",
+          "default": 300
+        },
+        "lengthOther": {
+          "type": "number",
+          "default": 60
+        },
+        "waitFirst": {
+          "type": "number",
+          "default": 720
+        },
+        "waitOther": {
+          "type": "number",
+          "default": 300
+        },
+        "specialLogic": {
+          "type": "boolean",
+          "description": "This is a special toggle to change the intermission commercial logic; only needs to be used if instructed.",
+          "default": false
+        }
+      },
+      "required": [
+        "lengthFirst",
+        "lengthOther",
+        "waitFirst",
+        "waitOther",
+        "specialLogic"
+      ]
+    },
     "obs": {
       "type": "object",
       "additionalProperties": false,
@@ -140,6 +174,7 @@
     "targetDensity",
     "endBuffer",
     "thisEvent",
+    "intermissionCommercials",
     "obs",
     "server"
   ]

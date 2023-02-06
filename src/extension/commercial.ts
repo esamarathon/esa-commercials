@@ -6,7 +6,7 @@ import obs, { isStreaming } from './util/obs';
 import { cycles, disabled, toggle } from './util/replicants';
 
 const config = nodecg().bundleConfig;
-const { minEstimate, commercialLength, targetDensity, endBuffer } = config;
+const { minEstimate, commercialLength, targetDensity, endBuffer, intermissionCommercials } = config;
 const nonRunCommercialScenes = (() => {
   const cfg = (config as DeepWritable<Configschema>).obs.nonRunCommercialScenes;
   return Array.isArray(cfg) ? cfg : [cfg];
@@ -104,7 +104,7 @@ sc.on('timerReset', () => {
 });
 
 /**
- * Once triggers, loops every 11m/8m10s until the loop is stopped elsewhere.
+ * Once triggers, loops every X minutes until the loop is stopped elsewhere.
  */
 async function playBreakCommercials(): Promise<void> {
   try {
@@ -121,8 +121,11 @@ async function playBreakCommercials(): Promise<void> {
       return;
     }
     if (toggle.value && isStreaming()) {
+      // TODO: If over 3 minutes, split up into batches?
       await sc.sendMessage('twitchStartCommercial', {
-        duration: intermissionCommercialCount < 1 ? 300 : 30, // 5 minutes / 30 seconds
+        duration: intermissionCommercialCount < 1
+          ? intermissionCommercials.lengthFirst
+          : intermissionCommercials.lengthOther,
       });
       nodecg().log.info(
         '[Commercial] Triggered due to non-run commercial scenes (count: %s)',
@@ -142,20 +145,29 @@ async function playBreakCommercials(): Promise<void> {
   }
   intermissionCommercialCount += 1;
   const time = intermissionCommercialCount > 1
-    ? (8 * 60 * 1000) + (10 * 1000)
-    : (11 * 60 * 1000);
+    ? intermissionCommercials.waitOther * 1000
+    : intermissionCommercials.waitFirst * 1000;
   intermissionCommercialTO = setTimeout(playBreakCommercials, time);
 }
 
 // Trigger a Twitch commercial when on the relevant scene.
 obs.on('SwitchScenes', async (data) => {
   if (data['scene-name'].startsWith(config.obs.nonRunCommercialTriggerScene)
-  && !intermissionCommercialTO) {
+  && !intermissionCommercialTO && !intermissionCommercials.specialLogic) {
     playBreakCommercials();
   }
 
-  // Stop running intermission commercial checks if scene isn't one we expect for it.
   const isSceneNonRun = !!nonRunCommercialScenes.find((s) => data['scene-name'].startsWith(s));
+
+  // Only used by esa-layouts so we can continue playing commercials once our intermission player
+  // ones have finished. Once we've switched to a relevant scene, skips the first one and waits
+  // until the "other" loops should start.
+  if (isSceneNonRun && !intermissionCommercialTO && intermissionCommercials.specialLogic) {
+    intermissionCommercialCount += 1;
+    intermissionCommercialTO = setTimeout(playBreakCommercials, intermissionCommercials.waitFirst);
+  }
+
+  // Stop running intermission commercial checks if scene isn't one we expect for it.
   if (!isSceneNonRun && intermissionCommercialTO) {
     clearTimeout(intermissionCommercialTO);
     intermissionCommercialTO = null;
@@ -178,16 +190,6 @@ if (sc.timer.value.state === 'running' && !disabled.value && cycles.value) {
     commercialInterval = setInterval(checkForCommercial, 1000);
   }
 }
-
-// Only used by esa-layouts so we can continue playing commercials once our intermission player
-// ones have finished. Once the video player has finished, will continue the cycle after 3m10s.
-// TODO: change to be smarter
-nodecg().listenFor('intermissionPlayerFinished', 'esa-layouts', () => {
-  if (!intermissionCommercialTO) {
-    intermissionCommercialCount += 1;
-    intermissionCommercialTO = setTimeout(playBreakCommercials, (3 * 60 * 1000) + (10 * 1000));
-  }
-});
 
 nodecg().listenFor('disable', () => {
   if (!disabled.value) {
