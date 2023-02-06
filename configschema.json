@@ -36,7 +36,11 @@
       "properties": {
         "lengthFirst": {
           "type": "number",
-          "default": 300
+          "default": 150
+        },
+        "lengthSecond": {
+          "type": "number",
+          "default": 150
         },
         "lengthOther": {
           "type": "number",
@@ -44,10 +48,17 @@
         },
         "waitFirst": {
           "type": "number",
-          "default": 720
+          "description": "Amount of time (in seconds) to wait between the first and second/other commercial.",
+          "default": 190
+        },
+        "waitSecond": {
+          "type": "number",
+          "description": "(Optional) Amount of time (in seconds) to wait between the second and other commercial.",
+          "default": 530
         },
         "waitOther": {
           "type": "number",
+          "description": "Amount of time (in seconds) to wait between the first/second and other commercial.",
           "default": 300
         },
         "specialLogic": {

@@ -28,8 +28,19 @@ export interface Configschema {
 	thisEvent: number;
 	intermissionCommercials: {
 		lengthFirst: number;
+		lengthSecond?: number;
 		lengthOther: number;
+		/**
+		 * Amount of time (in seconds) to wait between the first and second/other commercial.
+		 */
 		waitFirst: number;
+		/**
+		 * (Optional) Amount of time (in seconds) to wait between the second and other commercial.
+		 */
+		waitSecond?: number;
+		/**
+		 * Amount of time (in seconds) to wait between the first/second and other commercial.
+		 */
 		waitOther: number;
 		/**
 		 * This is a special toggle to change the intermission commercial logic; only needs to be used if instructed.

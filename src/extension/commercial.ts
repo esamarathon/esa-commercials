@@ -121,12 +121,17 @@ async function playBreakCommercials(): Promise<void> {
       return;
     }
     if (toggle.value && isStreaming()) {
-      // TODO: If over 3 minutes, split up into batches?
-      await sc.sendMessage('twitchStartCommercial', {
-        duration: intermissionCommercialCount < 1
-          ? intermissionCommercials.lengthFirst
-          : intermissionCommercials.lengthOther,
-      });
+      const duration = (() => {
+        switch (intermissionCommercialCount) {
+          case 1:
+            return intermissionCommercials.lengthFirst;
+          case 2:
+            return intermissionCommercials.lengthSecond ?? intermissionCommercials.lengthOther;
+          default:
+            return intermissionCommercials.lengthOther;
+        }
+      })();
+      await sc.sendMessage('twitchStartCommercial', { duration });
       nodecg().log.info(
         '[Commercial] Triggered due to non-run commercial scenes (count: %s)',
         intermissionCommercialCount + 1,
@@ -144,9 +149,16 @@ async function playBreakCommercials(): Promise<void> {
     );
   }
   intermissionCommercialCount += 1;
-  const time = intermissionCommercialCount > 1
-    ? intermissionCommercials.waitOther * 1000
-    : intermissionCommercials.waitFirst * 1000;
+  const time = (() => {
+    switch (intermissionCommercialCount) {
+      case 1:
+        return intermissionCommercials.waitFirst;
+      case 2:
+        return intermissionCommercials.waitSecond ?? intermissionCommercials.waitOther;
+      default:
+        return intermissionCommercials.waitOther;
+    }
+  })() * 1000;
   intermissionCommercialTO = setTimeout(playBreakCommercials, time);
 }
 
@@ -160,11 +172,14 @@ obs.on('SwitchScenes', async (data) => {
   const isSceneNonRun = !!nonRunCommercialScenes.find((s) => data['scene-name'].startsWith(s));
 
   // Only used by esa-layouts so we can continue playing commercials once our intermission player
-  // ones have finished. Once we've switched to a relevant scene, skips the first one and waits
-  // until the "other" loops should start.
+  // ones have finished. Once we've switched to a relevant scene, skips the first (and second)
+  // one(s) and waits until the "other" loops should start.
   if (isSceneNonRun && !intermissionCommercialTO && intermissionCommercials.specialLogic) {
-    intermissionCommercialCount += 1;
-    intermissionCommercialTO = setTimeout(playBreakCommercials, intermissionCommercials.waitFirst);
+    intermissionCommercialCount += 2;
+    intermissionCommercialTO = setTimeout(
+      playBreakCommercials,
+      intermissionCommercials.waitFirst + (intermissionCommercials.waitSecond ?? 0),
+    );
   }
 
   // Stop running intermission commercial checks if scene isn't one we expect for it.
