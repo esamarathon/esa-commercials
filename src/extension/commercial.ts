@@ -120,6 +120,7 @@ async function playBreakCommercials(): Promise<void> {
       }
       return;
     }
+    intermissionCommercialCount += 1;
     if (toggle.value && isStreaming()) {
       const duration = (() => {
         switch (intermissionCommercialCount) {
@@ -134,21 +135,20 @@ async function playBreakCommercials(): Promise<void> {
       await sc.sendMessage('twitchStartCommercial', { duration });
       nodecg().log.info(
         '[Commercial] Triggered due to non-run commercial scenes (count: %s)',
-        intermissionCommercialCount + 1,
+        intermissionCommercialCount,
       );
     }
   } catch (err) {
     nodecg().log.warn(
       '[Commercial] Could not successfully be triggered for non-run commercial scenes (count: %s)',
-      intermissionCommercialCount + 1,
+      intermissionCommercialCount,
     );
     nodecg().log.debug(
       '[Commercial] Could not successfully be triggered for non-run commercial scenes (count: %s):',
-      intermissionCommercialCount + 1,
+      intermissionCommercialCount,
       err,
     );
   }
-  intermissionCommercialCount += 1;
   const time = (() => {
     switch (intermissionCommercialCount) {
       case 1:
@@ -178,7 +178,7 @@ obs.on('SwitchScenes', async (data) => {
     intermissionCommercialCount += 2;
     intermissionCommercialTO = setTimeout(
       playBreakCommercials,
-      intermissionCommercials.waitFirst + (intermissionCommercials.waitSecond ?? 0),
+      (intermissionCommercials.waitFirst + (intermissionCommercials.waitSecond ?? 0)) * 1000,
     );
   }
 
