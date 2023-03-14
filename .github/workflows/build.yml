@@ -71,7 +71,6 @@ jobs:
     # Actually build everything
     - name: Build
       run: |
-        npm run clean
         npm run build
 
     # Commit newly built files
