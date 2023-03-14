@@ -201,8 +201,10 @@ if (sc.timer.value.state === 'running' && !disabled.value && cycles.value) {
     disabled.value = true;
     // TODO: Do the usual setup as a new run is being tracked (rare/impossible to happen).
   } else if (run) {
+    const timerS = sc.timer.value.milliseconds / 1000;
+    const nextCommercial = cycles.value.frequency - (timerS % cycles.value.frequency);
     nodecg().log.info('[Commercial] Will run in '
-      + `~${Math.round(cycles.value.frequency / 60)} minutes`);
+      + `~${Math.round(nextCommercial / 60)} minutes`);
     commercialInterval = setInterval(checkForCommercial, 1000);
   }
 }
