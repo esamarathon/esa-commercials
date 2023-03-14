@@ -24,8 +24,10 @@ const address = new URL(config.server.address !== 'ADDRESS'
     : 'http://localhost:2345');
 const pathname = address.pathname.endsWith('/')
     ? address.pathname.slice(0, -1) : address.pathname;
-const chans = Array.isArray(config.server.channels)
-    ? config.server.channels.map((c) => c.toLowerCase()) : [config.server.channels.toLowerCase()];
+const chans = (() => {
+    const cfg = config.server.channels;
+    return Array.isArray(cfg) ? cfg.map((c) => c.toLowerCase()) : [cfg.toLowerCase()];
+})();
 const socket = (0, socket_io_client_1.io)(address.origin, { path: `${pathname || ''}/socket.io`, autoConnect: false });
 function needleOpts() {
     const opts = {
@@ -90,10 +92,11 @@ function startCommercial(length, manual = false) {
     });
 }
 function changeTwitchMetadata(title, gameId) {
+    var _a, _b;
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const t = title || replicants_1.twitchChannelInfo.value.title;
-            const gID = gameId || replicants_1.twitchChannelInfo.value.game_id;
+            const t = title || ((_a = replicants_1.twitchChannelInfo.value) === null || _a === void 0 ? void 0 : _a.title);
+            const gID = gameId || ((_b = replicants_1.twitchChannelInfo.value) === null || _b === void 0 ? void 0 : _b.game_id);
             (0, nodecg_1.get)().log.debug('[Server] Decided Twitch title is: %s - Decided game ID is %s', t, gID);
             const serverChans = yield getAuthorisedChannels();
             const validChans = serverChans.filter((c) => chans.includes(c.name.toLowerCase()));
@@ -109,6 +112,8 @@ function changeTwitchMetadata(title, gameId) {
                 throw new Error(`status code ${resp.statusCode}: ${JSON.stringify(resp.body)}`);
             }
             // Update the data with what we've got.
+            if (!replicants_1.twitchChannelInfo.value)
+                replicants_1.twitchChannelInfo.value = {};
             replicants_1.twitchChannelInfo.value.title = (t === null || t === void 0 ? void 0 : t.slice(0, 140)) || '';
             replicants_1.twitchChannelInfo.value.game_id = gID || '';
             // twitchChannelInfo.value.game_name = dir?.name || '';
