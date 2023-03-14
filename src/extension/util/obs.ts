@@ -1,11 +1,10 @@
-import type { Configschema } from '@esa-commercials/types/schemas/configschema';
 import OBSWebSocketJS from 'obs-websocket-js';
 import { get as nodecg } from './nodecg';
 
-const config = (nodecg().bundleConfig as Configschema).obs;
+const config = nodecg().bundleConfig.obs;
 
 const obs = new OBSWebSocketJS();
-export let obsStreaming = false;
+let obsStreaming = false;
 const settings = {
   address: config.address,
   password: config.password,
@@ -40,5 +39,9 @@ obs.on('error', (err) => {
   nodecg().log.warn('[OBS] Connection error');
   nodecg().log.debug('[OBS] Connection error:', err);
 });
+
+export function isStreaming(): boolean {
+  return obsStreaming;
+}
 
 export default obs;

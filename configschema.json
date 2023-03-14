@@ -3,12 +3,77 @@
   "type": "object",
   "additionalProperties": false,
   "properties": {
+    "minEstimate": {
+      "type": "number",
+      "description": "Minimum estimate a run must have (in seconds) for commercial automation to take effect.",
+      "default": 3600
+    },
+    "commercialLength": {
+      "type": "number",
+      "description": "Length of commercials ran (in seconds).",
+      "default": 120
+    },
+    "targetDensity": {
+      "type": "number",
+      "description": "Minimum amount of commercials that must be ran each hour (in seconds).",
+      "default": 210
+    },
+    "endBuffer": {
+      "type": "number",
+      "description": "Amount of time (in seconds) before the end of a run in which commercials cannot play; mostly used as a backup.",
+      "default": 1200
+    },
     "thisEvent": {
       "type": "number",
       "description": "This toggles if on the 1st/2nd stream if applicable for your event.",
       "minimum": 1,
       "maximum": 2,
       "default": 1
+    },
+    "intermissionCommercials": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "lengthFirst": {
+          "type": "number",
+          "default": 150
+        },
+        "lengthSecond": {
+          "type": "number",
+          "default": 150
+        },
+        "lengthOther": {
+          "type": "number",
+          "default": 60
+        },
+        "waitFirst": {
+          "type": "number",
+          "description": "Amount of time (in seconds) to wait between the first and second/other commercial.",
+          "default": 190
+        },
+        "waitSecond": {
+          "type": "number",
+          "description": "(Optional) Amount of time (in seconds) to wait between the second and other commercial.",
+          "default": 530
+        },
+        "waitOther": {
+          "type": "number",
+          "description": "Amount of time (in seconds) to wait between the first/second and other commercial.",
+          "default": 300
+        },
+        "specialLogic": {
+          "type": "boolean",
+          "description": "This is a special toggle to change the intermission commercial logic; only needs to be used if instructed.",
+          "default": false
+        }
+      },
+      "required": [
+        "lengthFirst",
+        "lengthOther",
+        "waitFirst",
+        "waitOther",
+        "specialLogic"
+      ]
     },
     "obs": {
       "type": "object",
@@ -115,7 +180,12 @@
     }
   },
   "required": [
+    "minEstimate",
+    "commercialLength",
+    "targetDensity",
+    "endBuffer",
     "thisEvent",
+    "intermissionCommercials",
     "obs",
     "server"
   ]
