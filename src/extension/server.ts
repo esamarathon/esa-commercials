@@ -1,7 +1,7 @@
 import { Configschema } from '@esa-commercials/types/schemas';
 import { get as nodecg } from '@esa-commercials/util/nodecg';
 import needle, { NeedleOptions, NeedleResponse } from 'needle';
-import { io, Socket } from 'socket.io-client';
+import { io } from 'socket.io-client';
 import type { DeepWritable } from 'ts-essentials';
 import { twitchChannelInfo } from './util/replicants';
 import { sc } from './util/speedcontrol';
@@ -18,7 +18,7 @@ const chans = (() => {
   const cfg = (config as DeepWritable<Configschema>).server.channels;
   return Array.isArray(cfg) ? cfg.map((c) => c.toLowerCase()) : [cfg.toLowerCase()];
 })();
-const socket: typeof Socket = io(
+const socket = io(
   address.origin,
   { path: `${pathname || ''}/socket.io`, autoConnect: false },
 );
@@ -104,8 +104,8 @@ async function startCommercial(length: number, manual = false): Promise<NeedleRe
 
 async function changeTwitchMetadata(title?: string, gameId?: string): Promise<void> {
   try {
-    const t = title || (twitchChannelInfo.value.title as string | undefined);
-    const gID = gameId || (twitchChannelInfo.value.game_id as string | undefined);
+    const t = title || (twitchChannelInfo.value?.title as string | undefined);
+    const gID = gameId || (twitchChannelInfo.value?.game_id as string | undefined);
     nodecg().log.debug('[Server] Decided Twitch title is: %s - Decided game ID is %s', t, gID);
     const serverChans = await getAuthorisedChannels();
     const validChans = serverChans.filter((c) => chans.includes(c.name.toLowerCase()));
@@ -129,6 +129,7 @@ async function changeTwitchMetadata(title?: string, gameId?: string): Promise<vo
       throw new Error(`status code ${resp.statusCode}: ${JSON.stringify(resp.body)}`);
     }
     // Update the data with what we've got.
+    if (!twitchChannelInfo.value) twitchChannelInfo.value = {};
     twitchChannelInfo.value.title = t?.slice(0, 140) || '';
     twitchChannelInfo.value.game_id = gID || '';
     // twitchChannelInfo.value.game_name = dir?.name || '';
