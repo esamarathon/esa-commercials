@@ -6,8 +6,8 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 require('module-alias').addAlias('@esa-commercials', require('path').join(__dirname, '.'));
 
-import type NodeCG from '@alvancamp/test-nodecg-types';
 import { Configschema } from '@esa-commercials/types/schemas';
+import type NodeCG from '@nodecg/types';
 import { set } from './util/nodecg';
 
 export = async (nodecg: NodeCG.ServerAPI<Configschema>): Promise<void> => {

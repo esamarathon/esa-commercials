@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 
-import type NodeCG from '@alvancamp/test-nodecg-types';
 import { Cycles, Disabled, Toggle } from '@esa-commercials/types/schemas';
+import type NodeCG from '@nodecg/types';
 import { TwitchChannelInfo } from 'speedcontrol-util/types/schemas';
 import { get as nodecg } from './nodecg';
 
