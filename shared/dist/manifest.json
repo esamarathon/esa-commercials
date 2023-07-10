@@ -1,54 +1,54 @@
 {
-  "_index-be38d7ae.js": {
-    "file": "assets/index-be38d7ae.js"
+  "_index-59b0a809.js": {
+    "file": "assets/index-59b0a809.js"
   },
-  "node_modules/.pnpm/@quasar+extras@1.15.11/node_modules/@quasar/extras/material-icons/web-font/flUhRq6tzZclQEJ-Vdg-IuiaDsNa.woff": {
+  "node_modules/.pnpm/@quasar+extras@1.16.4/node_modules/@quasar/extras/material-icons/web-font/flUhRq6tzZclQEJ-Vdg-IuiaDsNa.woff": {
     "file": "assets/flUhRq6tzZclQEJ-Vdg-IuiaDsNa-fd84f88b.woff",
-    "src": "node_modules/.pnpm/@quasar+extras@1.15.11/node_modules/@quasar/extras/material-icons/web-font/flUhRq6tzZclQEJ-Vdg-IuiaDsNa.woff"
+    "src": "node_modules/.pnpm/@quasar+extras@1.16.4/node_modules/@quasar/extras/material-icons/web-font/flUhRq6tzZclQEJ-Vdg-IuiaDsNa.woff"
   },
-  "node_modules/.pnpm/@quasar+extras@1.15.11/node_modules/@quasar/extras/material-icons/web-font/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2": {
-    "file": "assets/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ-83be7b2f.woff2",
-    "src": "node_modules/.pnpm/@quasar+extras@1.15.11/node_modules/@quasar/extras/material-icons/web-font/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2"
+  "node_modules/.pnpm/@quasar+extras@1.16.4/node_modules/@quasar/extras/material-icons/web-font/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2": {
+    "file": "assets/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ-4a4dbc62.woff2",
+    "src": "node_modules/.pnpm/@quasar+extras@1.16.4/node_modules/@quasar/extras/material-icons/web-font/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2"
   },
-  "node_modules/.pnpm/@quasar+extras@1.15.11/node_modules/@quasar/extras/mdi-v6/materialdesignicons-webfont.woff": {
+  "node_modules/.pnpm/@quasar+extras@1.16.4/node_modules/@quasar/extras/mdi-v6/materialdesignicons-webfont.woff": {
     "file": "assets/materialdesignicons-webfont-7f3afe9b.woff",
-    "src": "node_modules/.pnpm/@quasar+extras@1.15.11/node_modules/@quasar/extras/mdi-v6/materialdesignicons-webfont.woff"
+    "src": "node_modules/.pnpm/@quasar+extras@1.16.4/node_modules/@quasar/extras/mdi-v6/materialdesignicons-webfont.woff"
   },
-  "node_modules/.pnpm/@quasar+extras@1.15.11/node_modules/@quasar/extras/mdi-v6/materialdesignicons-webfont.woff2": {
+  "node_modules/.pnpm/@quasar+extras@1.16.4/node_modules/@quasar/extras/mdi-v6/materialdesignicons-webfont.woff2": {
     "file": "assets/materialdesignicons-webfont-633d596f.woff2",
-    "src": "node_modules/.pnpm/@quasar+extras@1.15.11/node_modules/@quasar/extras/mdi-v6/materialdesignicons-webfont.woff2"
+    "src": "node_modules/.pnpm/@quasar+extras@1.16.4/node_modules/@quasar/extras/mdi-v6/materialdesignicons-webfont.woff2"
   },
-  "node_modules/.pnpm/@quasar+extras@1.15.11/node_modules/@quasar/extras/roboto-font/web-font/KFOkCnqEu92Fr1MmgVxIIzQ.woff": {
+  "node_modules/.pnpm/@quasar+extras@1.16.4/node_modules/@quasar/extras/roboto-font/web-font/KFOkCnqEu92Fr1MmgVxIIzQ.woff": {
     "file": "assets/KFOkCnqEu92Fr1MmgVxIIzQ-34e9582c.woff",
-    "src": "node_modules/.pnpm/@quasar+extras@1.15.11/node_modules/@quasar/extras/roboto-font/web-font/KFOkCnqEu92Fr1MmgVxIIzQ.woff"
+    "src": "node_modules/.pnpm/@quasar+extras@1.16.4/node_modules/@quasar/extras/roboto-font/web-font/KFOkCnqEu92Fr1MmgVxIIzQ.woff"
   },
-  "node_modules/.pnpm/@quasar+extras@1.15.11/node_modules/@quasar/extras/roboto-font/web-font/KFOlCnqEu92Fr1MmEU9fBBc-.woff": {
+  "node_modules/.pnpm/@quasar+extras@1.16.4/node_modules/@quasar/extras/roboto-font/web-font/KFOlCnqEu92Fr1MmEU9fBBc-.woff": {
     "file": "assets/KFOlCnqEu92Fr1MmEU9fBBc--9ce7f3ac.woff",
-    "src": "node_modules/.pnpm/@quasar+extras@1.15.11/node_modules/@quasar/extras/roboto-font/web-font/KFOlCnqEu92Fr1MmEU9fBBc-.woff"
+    "src": "node_modules/.pnpm/@quasar+extras@1.16.4/node_modules/@quasar/extras/roboto-font/web-font/KFOlCnqEu92Fr1MmEU9fBBc-.woff"
   },
-  "node_modules/.pnpm/@quasar+extras@1.15.11/node_modules/@quasar/extras/roboto-font/web-font/KFOlCnqEu92Fr1MmSU5fBBc-.woff": {
+  "node_modules/.pnpm/@quasar+extras@1.16.4/node_modules/@quasar/extras/roboto-font/web-font/KFOlCnqEu92Fr1MmSU5fBBc-.woff": {
     "file": "assets/KFOlCnqEu92Fr1MmSU5fBBc--bf14c7d7.woff",
-    "src": "node_modules/.pnpm/@quasar+extras@1.15.11/node_modules/@quasar/extras/roboto-font/web-font/KFOlCnqEu92Fr1MmSU5fBBc-.woff"
+    "src": "node_modules/.pnpm/@quasar+extras@1.16.4/node_modules/@quasar/extras/roboto-font/web-font/KFOlCnqEu92Fr1MmSU5fBBc-.woff"
   },
-  "node_modules/.pnpm/@quasar+extras@1.15.11/node_modules/@quasar/extras/roboto-font/web-font/KFOlCnqEu92Fr1MmWUlfBBc-.woff": {
+  "node_modules/.pnpm/@quasar+extras@1.16.4/node_modules/@quasar/extras/roboto-font/web-font/KFOlCnqEu92Fr1MmWUlfBBc-.woff": {
     "file": "assets/KFOlCnqEu92Fr1MmWUlfBBc--e0fd57c0.woff",
-    "src": "node_modules/.pnpm/@quasar+extras@1.15.11/node_modules/@quasar/extras/roboto-font/web-font/KFOlCnqEu92Fr1MmWUlfBBc-.woff"
+    "src": "node_modules/.pnpm/@quasar+extras@1.16.4/node_modules/@quasar/extras/roboto-font/web-font/KFOlCnqEu92Fr1MmWUlfBBc-.woff"
   },
-  "node_modules/.pnpm/@quasar+extras@1.15.11/node_modules/@quasar/extras/roboto-font/web-font/KFOlCnqEu92Fr1MmYUtfBBc-.woff": {
+  "node_modules/.pnpm/@quasar+extras@1.16.4/node_modules/@quasar/extras/roboto-font/web-font/KFOlCnqEu92Fr1MmYUtfBBc-.woff": {
     "file": "assets/KFOlCnqEu92Fr1MmYUtfBBc--f6537e32.woff",
-    "src": "node_modules/.pnpm/@quasar+extras@1.15.11/node_modules/@quasar/extras/roboto-font/web-font/KFOlCnqEu92Fr1MmYUtfBBc-.woff"
+    "src": "node_modules/.pnpm/@quasar+extras@1.16.4/node_modules/@quasar/extras/roboto-font/web-font/KFOlCnqEu92Fr1MmYUtfBBc-.woff"
   },
-  "node_modules/.pnpm/@quasar+extras@1.15.11/node_modules/@quasar/extras/roboto-font/web-font/KFOmCnqEu92Fr1Mu4mxM.woff": {
+  "node_modules/.pnpm/@quasar+extras@1.16.4/node_modules/@quasar/extras/roboto-font/web-font/KFOmCnqEu92Fr1Mu4mxM.woff": {
     "file": "assets/KFOmCnqEu92Fr1Mu4mxM-f2abf7fb.woff",
-    "src": "node_modules/.pnpm/@quasar+extras@1.15.11/node_modules/@quasar/extras/roboto-font/web-font/KFOmCnqEu92Fr1Mu4mxM.woff"
+    "src": "node_modules/.pnpm/@quasar+extras@1.16.4/node_modules/@quasar/extras/roboto-font/web-font/KFOmCnqEu92Fr1Mu4mxM.woff"
   },
   "src/dashboard/control.css": {
-    "file": "assets/control-4654d430.css",
+    "file": "assets/control-9f3cf5d3.css",
     "src": "src/dashboard/control.css"
   },
   "src/dashboard/control.ts": {
     "assets": [
-      "assets/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ-83be7b2f.woff2",
+      "assets/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ-4a4dbc62.woff2",
       "assets/flUhRq6tzZclQEJ-Vdg-IuiaDsNa-fd84f88b.woff",
       "assets/materialdesignicons-webfont-633d596f.woff2",
       "assets/materialdesignicons-webfont-7f3afe9b.woff",
@@ -60,19 +60,19 @@
       "assets/KFOlCnqEu92Fr1MmYUtfBBc--f6537e32.woff"
     ],
     "css": [
-      "assets/control-4654d430.css"
+      "assets/control-9f3cf5d3.css"
     ],
-    "file": "assets/control-3c7cc72b.js",
+    "file": "assets/control-916cb06f.js",
     "imports": [
-      "_index-be38d7ae.js"
+      "_index-59b0a809.js"
     ],
     "isEntry": true,
     "src": "src/dashboard/control.ts"
   },
   "src/graphics/blank.ts": {
-    "file": "assets/blank-1e7711ca.js",
+    "file": "assets/blank-53f78464.js",
     "imports": [
-      "_index-be38d7ae.js"
+      "_index-59b0a809.js"
     ],
     "isEntry": true,
     "src": "src/graphics/blank.ts"
