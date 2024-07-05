@@ -1,6 +1,6 @@
 {
-  "_index-cec424fb.js": {
-    "file": "assets/index-cec424fb.js"
+  "_index-8c7dd673.js": {
+    "file": "assets/index-8c7dd673.js"
   },
   "node_modules/.pnpm/@quasar+extras@1.16.11/node_modules/@quasar/extras/material-icons/web-font/flUhRq6tzZclQEJ-Vdg-IuiaDsNa.woff": {
     "file": "assets/flUhRq6tzZclQEJ-Vdg-IuiaDsNa-fd84f88b.woff",
@@ -62,17 +62,17 @@
     "css": [
       "assets/control-df1ceb57.css"
     ],
-    "file": "assets/control-65fe2b05.js",
+    "file": "assets/control-95d0e655.js",
     "imports": [
-      "_index-cec424fb.js"
+      "_index-8c7dd673.js"
     ],
     "isEntry": true,
     "src": "src/dashboard/control.ts"
   },
   "src/graphics/blank.ts": {
-    "file": "assets/blank-f6994afd.js",
+    "file": "assets/blank-35ba9a28.js",
     "imports": [
-      "_index-cec424fb.js"
+      "_index-8c7dd673.js"
     ],
     "isEntry": true,
     "src": "src/graphics/blank.ts"
