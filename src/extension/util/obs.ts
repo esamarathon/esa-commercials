@@ -12,7 +12,7 @@ async function connect(): Promise<void> {
       obsWebSocketVersion,
       rpcVersion,
     } = await obs.connect(
-      config.address,
+      `ws://${config.address}`,
       config.password,
       {
         // eslint-disable-next-line no-bitwise
