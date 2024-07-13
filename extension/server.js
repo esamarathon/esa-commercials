@@ -127,66 +127,64 @@ function changeTwitchMetadata(title, gameId) {
 }
 // eslint-disable-next-line import/prefer-default-export
 function setup() {
-    return __awaiter(this, void 0, void 0, function* () {
-        if (!config.server.enabled)
-            return;
-        (0, nodecg_1.get)().log.info('[Server] Setting up');
-        socket.on('connect', () => {
-            socket.emit('authenticate', config.server.token);
-            (0, nodecg_1.get)().log.info('[Server] Socket.IO client connected');
-        });
-        socket.on('authenticated', () => {
-            (0, nodecg_1.get)().log.info('[Server] Socket.IO client authenticated');
-        });
-        socket.on('disconnect', (reason) => {
-            (0, nodecg_1.get)().log.info('[Server] Socket.IO client disconnected');
-            (0, nodecg_1.get)().log.debug('[Server] Socket.IO client disconnected:', reason);
-        });
-        socket.on('commercialLogged', (val) => __awaiter(this, void 0, void 0, function* () {
-            try {
-                // Check against ID if this commercial is applicable to this channel or not.
-                const serverChanIds = (yield getAuthorisedChannels())
-                    .filter((c) => chans.includes(c.name.toLowerCase())).map((c) => c.id);
-                if (val.channelIds.filter((c) => serverChanIds.includes(c)).length) {
-                    yield speedcontrol_1.sc.sendMessage('twitchStartCommercialTimer', { duration: val.length });
-                }
-            }
-            catch (err) { /* ignore */ }
-        }));
-        socket.connect();
-        speedcontrol_1.sc.listenFor('twitchExternalCommercial', (data, ack) => __awaiter(this, void 0, void 0, function* () {
-            try {
-                const { body } = yield startCommercial(data.duration, data.fromDashboard);
-                if (!ack.handled) {
-                    if (body) {
-                        ack(null, { duration: body.length });
-                    }
-                    else {
-                        ack(new Error('server error; no channels to run commercials on'));
-                    }
-                }
-            }
-            catch (err) {
-                if (!ack.handled)
-                    ack(err);
-            }
-        }));
-        if (config.server.updateMetadata) {
-            if (config.server.updateMetadataAltMode) {
-                // Used to change the Twitch title/category when requested by any bundle targetting us.
-                (0, nodecg_1.get)().listenFor('twitchExternalMetadataAltMode', (_a) => __awaiter(this, [_a], void 0, function* ({ title, gameID }) {
-                    (0, nodecg_1.get)().log.debug('[Server] Message received to change title/game, will attempt (title: %s, game id: %s)', title, gameID);
-                    yield changeTwitchMetadata(title, gameID);
-                }));
-            }
-            else {
-                // Used to change the Twitch title/category when requested by nodecg-speedcontrol.
-                (0, nodecg_1.get)().listenFor('twitchExternalMetadata', 'nodecg-speedcontrol', (_b) => __awaiter(this, [_b], void 0, function* ({ title, gameID }) {
-                    (0, nodecg_1.get)().log.debug('[Server] Message received to change title/game, will attempt (title: %s, game id: %s)', title, gameID);
-                    yield changeTwitchMetadata(title, gameID);
-                }));
+    if (!config.server.enabled)
+        return;
+    (0, nodecg_1.get)().log.info('[Server] Setting up');
+    socket.on('connect', () => {
+        socket.emit('authenticate', config.server.token);
+        (0, nodecg_1.get)().log.info('[Server] Socket.IO client connected');
+    });
+    socket.on('authenticated', () => {
+        (0, nodecg_1.get)().log.info('[Server] Socket.IO client authenticated');
+    });
+    socket.on('disconnect', (reason) => {
+        (0, nodecg_1.get)().log.info('[Server] Socket.IO client disconnected');
+        (0, nodecg_1.get)().log.debug('[Server] Socket.IO client disconnected:', reason);
+    });
+    socket.on('commercialLogged', (val) => __awaiter(this, void 0, void 0, function* () {
+        try {
+            // Check against ID if this commercial is applicable to this channel or not.
+            const serverChanIds = (yield getAuthorisedChannels())
+                .filter((c) => chans.includes(c.name.toLowerCase())).map((c) => c.id);
+            if (val.channelIds.filter((c) => serverChanIds.includes(c)).length) {
+                yield speedcontrol_1.sc.sendMessage('twitchStartCommercialTimer', { duration: val.length });
             }
         }
-    });
+        catch (err) { /* ignore */ }
+    }));
+    socket.connect();
+    speedcontrol_1.sc.listenFor('twitchExternalCommercial', (data, ack) => __awaiter(this, void 0, void 0, function* () {
+        try {
+            const { body } = yield startCommercial(data.duration, data.fromDashboard);
+            if (!ack.handled) {
+                if (body) {
+                    ack(null, { duration: body.length });
+                }
+                else {
+                    ack(new Error('server error; no channels to run commercials on'));
+                }
+            }
+        }
+        catch (err) {
+            if (!ack.handled)
+                ack(err);
+        }
+    }));
+    if (config.server.updateMetadata) {
+        if (config.server.updateMetadataAltMode) {
+            // Used to change the Twitch title/category when requested by any bundle targetting us.
+            (0, nodecg_1.get)().listenFor('twitchExternalMetadataAltMode', (_a) => __awaiter(this, [_a], void 0, function* ({ title, gameID }) {
+                (0, nodecg_1.get)().log.debug('[Server] Message received to change title/game, will attempt (title: %s, game id: %s)', title, gameID);
+                yield changeTwitchMetadata(title, gameID);
+            }));
+        }
+        else {
+            // Used to change the Twitch title/category when requested by nodecg-speedcontrol.
+            (0, nodecg_1.get)().listenFor('twitchExternalMetadata', 'nodecg-speedcontrol', (_b) => __awaiter(this, [_b], void 0, function* ({ title, gameID }) {
+                (0, nodecg_1.get)().log.debug('[Server] Message received to change title/game, will attempt (title: %s, game id: %s)', title, gameID);
+                yield changeTwitchMetadata(title, gameID);
+            }));
+        }
+    }
 }
 exports.setup = setup;

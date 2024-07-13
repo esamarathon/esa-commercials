@@ -139,8 +139,8 @@ function playBreakCommercials() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             // If we're no longer on an appropriate scene, stop trying to play non-run commercials.
-            const scene = yield obs_1.default.send('GetCurrentScene');
-            const isSceneNonRun = !!nonRunCommercialScenes.find((s) => scene.name.startsWith(s));
+            const scene = yield obs_1.default.call('GetCurrentProgramScene');
+            const isSceneNonRun = !!nonRunCommercialScenes.find((s) => scene.sceneName.startsWith(s));
             if (!isSceneNonRun) {
                 if (intermissionCommercialTO) {
                     clearTimeout(intermissionCommercialTO);
@@ -186,13 +186,13 @@ function playBreakCommercials() {
     });
 }
 // Trigger a Twitch commercial when on the relevant scene.
-obs_1.default.on('SwitchScenes', (data) => __awaiter(void 0, void 0, void 0, function* () {
+obs_1.default.on('CurrentProgramSceneChanged', (data) => {
     var _a;
-    if (data['scene-name'].startsWith(config.obs.nonRunCommercialTriggerScene)
+    if (data.sceneName.startsWith(config.obs.nonRunCommercialTriggerScene)
         && !intermissionCommercialTO && !intermissionCommercials.specialLogic) {
-        playBreakCommercials();
+        playBreakCommercials().catch(() => { });
     }
-    const isSceneNonRun = !!nonRunCommercialScenes.find((s) => data['scene-name'].startsWith(s));
+    const isSceneNonRun = !!nonRunCommercialScenes.find((s) => data.sceneName.startsWith(s));
     // Only used by esa-layouts so we can continue playing commercials once our intermission player
     // ones have finished. Once we've switched to a relevant scene, skips the first (and second)
     // one(s) and waits until the "other" loops should start.
@@ -207,7 +207,7 @@ obs_1.default.on('SwitchScenes', (data) => __awaiter(void 0, void 0, void 0, fun
         intermissionCommercialCount = 0;
         (0, nodecg_1.get)().log.info('[Commercial] Will no longer check for non-run commercial scenes');
     }
-}));
+});
 // If the timer has been recovered on start up,
 // need to make sure the commercial checking is going to run.
 if (speedcontrol_1.sc.timer.value.state === 'running' && !replicants_1.disabled.value && replicants_1.cycles.value) {
