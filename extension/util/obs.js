@@ -42,7 +42,7 @@ function connect() {
     return __awaiter(this, void 0, void 0, function* () {
         var _a;
         try {
-            const { obsWebSocketVersion, rpcVersion, } = yield obs.connect(config.address, config.password, {
+            const { obsWebSocketVersion, rpcVersion, } = yield obs.connect(`ws://${config.address}`, config.password, {
                 // eslint-disable-next-line no-bitwise
                 eventSubscriptions: obs_websocket_js_1.EventSubscription.MediaInputs | obs_websocket_js_1.EventSubscription.Transitions,
             });
