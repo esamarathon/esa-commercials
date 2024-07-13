@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Cycles, Disabled, Toggle } from '@esa-commercials/types/schemas';
-import { useHead } from '@vueuse/head';
+import { useHead } from '@unhead/vue';
 import { useReplicant } from 'nodecg-vue-composable';
 import { Timer } from 'speedcontrol-util/types';
 import { computed } from 'vue';
