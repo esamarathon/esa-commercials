@@ -80,7 +80,7 @@
       {
         "name": "control",
         "title": "ESA Commercial Control",
-        "file": "control.html",
+        "file": "control/main.html",
         "workspace": "ESA",
         "headerColor": "#c49215",
         "width": 3
