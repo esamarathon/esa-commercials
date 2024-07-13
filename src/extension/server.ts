@@ -141,7 +141,7 @@ async function changeTwitchMetadata(title?: string, gameId?: string): Promise<vo
 }
 
 // eslint-disable-next-line import/prefer-default-export
-export async function setup(): Promise<void> {
+export function setup(): void {
   if (!config.server.enabled) return;
   nodecg().log.info('[Server] Setting up');
 

@@ -40,6 +40,11 @@ module.exports = {
       ts: 'never',
       tsx: 'never',
     }],
+
+    // Additional rules not from the template.
+    'require-await': 'off', // May not be needed but including for safety
+    '@typescript-eslint/require-await': 'error',
+    '@typescript-eslint/no-floating-promises': 'error',
   },
 
   // Overrides for types.

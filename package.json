@@ -38,7 +38,7 @@
     "@nodecg/types": "^2.1.12",
     "module-alias": "^2.2.3",
     "needle": "^3.3.1",
-    "obs-websocket-js": "^4.0.3",
+    "obs-websocket-js": "^5.0.5",
     "socket.io-client": "^4.7.5",
     "speedcontrol-util": "github:speedcontrol/speedcontrol-util.git#build"
   },

@@ -110,8 +110,8 @@ sc.on('timerReset', () => {
 async function playBreakCommercials(): Promise<void> {
   try {
     // If we're no longer on an appropriate scene, stop trying to play non-run commercials.
-    const scene = await obs.send('GetCurrentScene');
-    const isSceneNonRun = !!nonRunCommercialScenes.find((s) => scene.name.startsWith(s));
+    const scene = await obs.call('GetCurrentProgramScene');
+    const isSceneNonRun = !!nonRunCommercialScenes.find((s) => scene.sceneName.startsWith(s));
     if (!isSceneNonRun) {
       if (intermissionCommercialTO) {
         clearTimeout(intermissionCommercialTO);
@@ -164,13 +164,13 @@ async function playBreakCommercials(): Promise<void> {
 }
 
 // Trigger a Twitch commercial when on the relevant scene.
-obs.on('SwitchScenes', async (data) => {
-  if (data['scene-name'].startsWith(config.obs.nonRunCommercialTriggerScene)
+obs.on('CurrentProgramSceneChanged', (data) => {
+  if (data.sceneName.startsWith(config.obs.nonRunCommercialTriggerScene)
   && !intermissionCommercialTO && !intermissionCommercials.specialLogic) {
-    playBreakCommercials();
+    playBreakCommercials().catch(() => {});
   }
 
-  const isSceneNonRun = !!nonRunCommercialScenes.find((s) => data['scene-name'].startsWith(s));
+  const isSceneNonRun = !!nonRunCommercialScenes.find((s) => data.sceneName.startsWith(s));
 
   // Only used by esa-layouts so we can continue playing commercials once our intermission player
   // ones have finished. Once we've switched to a relevant scene, skips the first (and second)
