@@ -26,7 +26,7 @@ If not obvious, you must be logged into/authorised with Twitch in the `nodecg-sp
   "thisEvent": 1,
   "obs": {
     "enabled": true,
-    "address": "localhost:4444",
+    "address": "localhost:4455",
     "password": "",
     "nonRunCommercialTriggerScene": "Intermission (commercials)",
     "nonRunCommercialScenes": [
